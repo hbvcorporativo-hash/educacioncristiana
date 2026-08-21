@@ -564,7 +564,7 @@ const sfx=(()=>{let x=null,mute=false;
 /* ---------- música de fondo (continua) ---------- */
 const musica=(()=>{
   let a=null, vol=.42, listo=false, agachada=false;
-  const FUENTES=['canciones/revolution.mp3','canciones/principal.mp3','canciones/1.mp3'];
+  const FUENTES=['canciones/revolution.mp3','revolution.mp3','canciones/principal.mp3','principal.mp3','canciones/1.mp3','1.mp3'];
   let idx=0;
   function crear(){
     if(idx>=FUENTES.length){ a=null; return; }
@@ -883,7 +883,7 @@ function verMusica(){
    `<div class="linea"><div class="f mono">canciones/revolution.mp3</div>
       <div class="t">Canción principal — suena continua durante todo el juego.<br>
       <b>We Are The Revolution</b> · Nxtwave (WATR)</div></div>
-    <div class="linea"><div class="f mono">canciones/principal.mp3</div><div class="t">Nombre alterno aceptado (por si prefieren otro archivo).</div></div>
+    <div class="linea"><div class="f mono">revolution.mp3</div><div class="t">Tambien funciona si el archivo queda suelto, al lado del index.html (sin carpeta).</div></div>
     <div class="linea"><div class="t" style="color:var(--gris)">La música baja sola cuando Leo habla y vuelve a subir al terminar.</div></div>`;
   $('#capaMusica').classList.add('on');
 }
