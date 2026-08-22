@@ -421,13 +421,14 @@ input{font-family:var(--f);}
   <div class="hoja-top"><h3>🎵 Música NXTWAVE</h3><button class="hud-ico" id="cerrarMusica">✕</button></div>
   <div class="hoja-int">Pon las canciones de NXTWAVE en una carpeta <code>canciones/</code> junto a tu <code>index.html</code>, con estos nombres. Sonarán de fondo en cada nivel. Si un archivo no existe, ese nivel va sin música.</div>
   <div style="padding:13px 17px 0"><button class="bt cian" id="btnPlay">▶ REPRODUCIR CANCIÓN</button></div>
-  <div class="vol"><span style="font-size:13px">Volumen</span><input type="range" id="volSlider" min="0" max="100" value="45"><span class="mono" id="volTxt" style="font-size:12px;width:34px;text-align:right">45</span></div>
+  <div class="vol"><span style="font-size:13px">Música MP3 (máx 7%)</span><input type="range" id="volSlider" min="0" max="100" value="100" aria-label="Volumen de música MP3"><span class="mono" id="volTxt" style="font-size:12px;width:34px;text-align:right">100</span></div>
   <div class="hoja-cuerpo" id="cuerpoMusica"></div>
 </div></div>
 
 <div class="capa" id="capaGuion"><div class="hoja">
   <div class="hoja-top"><h3>🎙 Voces de Leo</h3><button class="hud-ico" id="cerrarGuion">✕</button></div>
   <div class="hoja-int">Graba cada línea y guárdala como <code>[nombre].mp3</code> en una carpeta <code>voces/</code>. Mientras no existan, Leo usa la voz del navegador.</div>
+  <div class="vol"><span style="font-size:13px">Voces de Leo</span><input type="range" id="vozSlider" min="0" max="100" value="85" aria-label="Volumen de las voces de Leo"><span class="mono" id="vozTxt" style="font-size:12px;width:34px;text-align:right">85</span></div>
   <div class="hoja-cuerpo" id="cuerpoGuion"></div>
 </div></div>
 
@@ -563,9 +564,25 @@ const sfx=(()=>{let x=null,mute=false;
 
 /* ---------- música de fondo (continua) ---------- */
 const musica=(()=>{
-  let a=null, vol=.42, listo=false, agachada=false;
+  let a=null, vol=.07, listo=false, agachada=false, rampId=null;
   const FUENTES=['canciones/revolution.mp3','revolution.mp3','canciones/principal.mp3','principal.mp3','canciones/1.mp3','1.mp3'];
   let idx=0;
+  function setVol(v){ if(a) a.volume=v; }
+  function rampTo(target, duration=2500){
+    if(!a) return;
+    clearInterval(rampId);
+    const start=a.volume;
+    const diff=target-start;
+    if(Math.abs(diff)<0.001){ setVol(target); return; }
+    const startTime=performance.now();
+    rampId=setInterval(()=>{
+      const elapsed=performance.now()-startTime;
+      const t=Math.min(1, elapsed/duration);
+      const eased=1-Math.pow(1-t, 3);
+      setVol(start + diff*eased);
+      if(t>=1){ clearInterval(rampId); rampId=null; }
+    }, 16);
+  }
   function crear(){
     if(idx>=FUENTES.length){ a=null; return; }
     a=new Audio(FUENTES[idx]); a.loop=true; a.volume=vol;
@@ -573,10 +590,18 @@ const musica=(()=>{
   }
   return{
     iniciar(){ if(listo)return; listo=true; crear(); if(a) a.play().catch(()=>{}); },
-    parar(){ if(a){try{a.pause();}catch(q){}} listo=false; idx=0; a=null; },
-    vol(v){ vol=v; if(a) a.volume=agachada?vol*.28:vol; },
+    parar(){ if(a){try{a.pause();}catch(q){}} clearInterval(rampId); rampId=null; listo=false; idx=0; a=null; },
+    vol(v){ vol=Math.max(0, Math.min(1, v)); if(a && !agachada) setVol(vol); },
     getVol(){ return vol; },
-    agachar(v){ agachada=v; if(a) a.volume=v?vol*.28:vol; },
+    agachar(v){
+      agachada=v;
+      if(!a) return;
+      if(v){
+        setVol(vol * 0.03 / 0.07);
+      }else{
+        rampTo(vol, 3000);
+      }
+    },
     sonando(){ return !!(a && !a.paused); }
   };
 })();
@@ -846,22 +871,23 @@ function otraVez(){ pararReloj(); musica.parar();
   verPantalla('pMapa'); pintarMapa(); hablar('intro'); }
 
 /* ---------- voz ---------- */
-let audio=null, texto='', vozId=null;
+let audio=null, texto='', vozId=null, volumenVoz=0.85;
 function hablar(id,fin){ const t=VOCES[id]||''; texto=t; vozId=id; const gl=$('#globo'); if(gl)gl.textContent=t; sonar(id,t,fin); }
 function sonar(id,t,fin){ parar(); hablando(true);
   let cayo=false,listo=false;
   const ok=()=>{if(listo)return;listo=true;hablando(false);if(fin)fin();};
   const fb=()=>{if(cayo)return;cayo=true;vozNav(t,ok);};
-  try{ const a=new Audio('voces/'+id+'.mp3'); audio=a;
+   try{ const a=new Audio('voces/'+id+'.mp3'); a.volume=volumenVoz; audio=a;
    a.addEventListener('ended',ok); a.addEventListener('error',fb); a.play().then(()=>{}).catch(fb);
   }catch(q){fb();} }
 function vozNav(t,fin){ if(!('speechSynthesis' in window)){hablando(false);if(fin)fin();return;}
-  speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.lang='es-ES';
+   speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.lang='es-ES'; u.volume=volumenVoz;
   const v=(speechSynthesis.getVoices()||[]).find(z=>/es/i.test(z.lang)); if(v)u.voice=v;
   u.rate=1.04;u.pitch=1.12;u.onend=()=>{hablando(false);if(fin)fin();};u.onerror=()=>{hablando(false);if(fin)fin();};
   speechSynthesis.speak(u); }
 function parar(){ if(audio){try{audio.pause();}catch(q){}audio=null;} if('speechSynthesis' in window)speechSynthesis.cancel(); }
 function hablando(v){ const l=$('#leo'); if(l) l.classList.toggle('habla',v); musica.agachar(v); }
+function volumenDeVoz(v){ volumenVoz=Math.max(0,Math.min(1,v)); if(audio)audio.volume=volumenVoz; }
 if('speechSynthesis' in window) speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
 
 /* avatar de Leo */
@@ -916,7 +942,8 @@ $('#capaMusica').addEventListener('click',ev=>{ if(ev.target.id==='capaMusica')$
 $$('.btnGuion').forEach(b=>b.onclick=()=>{ sfx.tap(); verGuion(); });
 $('#cerrarGuion').onclick=()=>$('#capaGuion').classList.remove('on');
 $('#capaGuion').addEventListener('click',ev=>{ if(ev.target.id==='capaGuion')$('#capaGuion').classList.remove('on'); });
-$('#volSlider').addEventListener('input',ev=>{ const v=+ev.target.value; $('#volTxt').textContent=v; musica.vol(v/100); });
+$('#volSlider').addEventListener('input',ev=>{ const v=+ev.target.value; $('#volTxt').textContent=v; musica.vol(v/100 * 0.07); });
+$('#vozSlider').addEventListener('input',ev=>{ const v=+ev.target.value; $('#vozTxt').textContent=v; volumenDeVoz(v/100); });
 </script>
 </body>
 </html>
