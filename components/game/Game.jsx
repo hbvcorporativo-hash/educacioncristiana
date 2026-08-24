@@ -358,10 +358,13 @@ export default function Game() {
 
   /* ===== AUDIO CONTROLES ===== */
   function toggleSonido() {
-    const v = !sfx.muted()
-    sfx.mute(v)
-    setMuteSfx(v)
-    if (!v) sfx.tap()
+    const silenciado = !sfx.muted()
+    sfx.mute(silenciado)
+    setMuteSfx(silenciado)
+    if (!silenciado) {
+      sfx.init()
+      sfx.tap()
+    }
   }
   function togglePlay() {
     sfx.tap()
