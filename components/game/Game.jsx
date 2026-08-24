@@ -41,9 +41,14 @@ export default function Game() {
   const [btnPlayTxt, setBtnPlayTxt] = useState('▶ REPRODUCIR CANCIÓN')
   const [volMus, setVolMus] = useState(100)
   const [volVoz, setVolVoz] = useState(85)
+  const [agente, setAgente] = useState('principal')
 
   const inputFoto = useRef(null)
+  const videoFoto = useRef(null)
+  const streamFoto = useRef(null)
   const scrollRefs = useRef({})
+  const [camaraAbierta, setCamaraAbierta] = useState(false)
+  const [camaraError, setCamaraError] = useState('')
 
   const hechos = nv.filter(x => x.hecho).length
   const fraccion = hechos / N
@@ -54,7 +59,7 @@ export default function Game() {
     nuevasSeeds()
     voz.initVoces()
     voz.registrarUI({ setTexto: t => setGlobo(t), setHabla: v => setLeoHabla(v) })
-    return () => { pararReloj(); voz.pararVoz(); musica.parar() }
+    return () => { pararReloj(); detenerCamara(); voz.pararVoz(); musica.parar() }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -145,6 +150,58 @@ export default function Game() {
     const fr = new FileReader()
     fr.onload = ev => { img.src = ev.target.result }
     fr.readAsDataURL(f)
+  }
+
+  function detenerCamara() {
+    if (streamFoto.current) {
+      streamFoto.current.getTracks().forEach(track => track.stop())
+      streamFoto.current = null
+    }
+    if (videoFoto.current) videoFoto.current.srcObject = null
+    setCamaraAbierta(false)
+  }
+
+  async function abrirCamara() {
+    sfx.tap()
+    setCamaraError('')
+    if (!navigator.mediaDevices?.getUserMedia) {
+      inputFoto.current?.click()
+      return
+    }
+    try {
+      detenerCamara()
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: 'environment' } },
+        audio: false
+      })
+      streamFoto.current = stream
+      setCamaraAbierta(true)
+      requestAnimationFrame(() => {
+        if (videoFoto.current) {
+          videoFoto.current.srcObject = stream
+          videoFoto.current.play().catch(() => {})
+        }
+      })
+    } catch (error) {
+      setCamaraError(error.name === 'NotAllowedError' ? 'Permiso de cámara denegado. Puedes seleccionar una imagen.' : 'No se pudo abrir la cámara. Puedes seleccionar una imagen.')
+      inputFoto.current?.click()
+    }
+  }
+
+  function capturarFoto() {
+    const video = videoFoto.current
+    if (!video || video.readyState < 2 || actual === null) return
+    const canvas = document.createElement('canvas')
+    const max = 900
+    const escala = Math.min(1, max / Math.max(video.videoWidth, video.videoHeight))
+    canvas.width = Math.round(video.videoWidth * escala)
+    canvas.height = Math.round(video.videoHeight * escala)
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height)
+    const foto = canvas.toDataURL('image/jpeg', .72)
+    detenerCamara()
+    setNv(prev => prev.map((y, j) => j === actual ? { ...y, foto } : y))
+    avisar('✔ evidencia guardada', 'ok')
+    sfx.foto(); flash()
   }
 
   function onFoto(ev) {
@@ -550,7 +607,7 @@ export default function Game() {
                   : <div className="foto-vacia">Tomen la foto del reto terminado</div>}
               </div>
               {!nivelX.hecho && (
-                <button className="bt ghost" id="btnFoto" onClick={() => { sfx.tap(); inputFoto.current.click() }}>
+                <button className="bt ghost" id="btnFoto" onClick={abrirCamara}>
                   {nivelX.foto ? '🔄 CAMBIAR FOTO' : '📸 TOMAR FOTO'}
                 </button>
               )}
@@ -649,10 +706,18 @@ export default function Game() {
       {capaGuion && (
         <div className="capa on" id="capaGuion" onClick={ev => { if (ev.target.id === 'capaGuion') setCapaGuion(false) }}>
           <div className="hoja">
-            <div className="hoja-top"><h3>🎙 Voces de Leo</h3>
+            <div className="hoja-top"><h3>🎙 Voces de {agente === 'mujer' ? 'Sara' : 'Leo'}</h3>
               <button className="hud-ico" onClick={() => setCapaGuion(false)}>✕</button></div>
             <div className="hoja-int">
-              Graba cada línea y guárdala como <code>[nombre].mp3</code> en una carpeta <code>voces/</code>. Mientras no existan, Leo usa la voz del navegador.
+              Graba cada línea y guárdala como <code>[nombre].mp3</code> en una carpeta <code>voces/</code>. Si no existen, {agente === 'mujer' ? 'Sara' : 'Leo'} usa la voz del navegador.
+            </div>
+            <div className="agent-picker">
+              <div className="op-tit">Agente de voz</div>
+              <div className="fila">
+                {[['principal', 'Leo · voz natural'], ['sistema', 'Leo · voz del sistema'], ['mujer', 'Sara · voz femenina']].map(([id, nombre]) => (
+                  <button key={id} className="mini" data-sel={agente === id ? '1' : '0'} onClick={() => { setAgente(id); voz.seleccionarAgente(id); sfx.tap() }}>{nombre}</button>
+                ))}
+              </div>
             </div>
             <div className="vol">
               <span style={{ fontSize: 13 }}>Voces de Leo</span>
@@ -689,6 +754,19 @@ export default function Game() {
       )}
 
       <input ref={inputFoto} type="file" accept="image/*" capture="environment" id="inputFoto" style={{ display: 'none' }} onChange={onFoto} />
+      {camaraAbierta && (
+        <div className="capa on camera-layer">
+          <div className="camera-panel">
+            <div className="hoja-top"><h3>📸 Cámara de evidencia</h3><button className="hud-ico" onClick={detenerCamara}>✕</button></div>
+            <video ref={videoFoto} className="camera-video" autoPlay playsInline muted />
+            <div className="camera-actions">
+              <button className="bt verde" onClick={capturarFoto}>CAPTURAR FOTO</button>
+              <button className="bt ghost" onClick={detenerCamara}>CANCELAR</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {camaraError && <div className="aviso mal camera-error">{camaraError}</div>}
       <div className="bandera" id="bandera"><div className="bandera-txt mono" id="banderaTxt"></div></div>
       <div className="flash" id="flash"></div>
     </>

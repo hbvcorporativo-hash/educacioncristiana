@@ -291,6 +291,8 @@ input{font-family:var(--f);}
 .linea .t{font-size:13.5px;margin-top:4px;line-height:1.45;color:#C4D8EA;}
 .vol{display:flex;align-items:center;gap:10px;padding:12px 17px;border-bottom:1px solid var(--linea);}
 .vol input{flex:1;}
+.agent-picker{padding:12px 17px;border-bottom:1px solid var(--linea);}
+.agent-picker .mini[data-sel="1"]{border-color:var(--verde);color:var(--verde);box-shadow:0 0 0 2px rgba(52,227,155,.16);}
 
 /* ===== efectos ===== */
 .bandera{position:fixed;inset:0;z-index:78;display:flex;align-items:center;justify-content:center;pointer-events:none;}
@@ -302,4 +304,11 @@ input{font-family:var(--f);}
 .flash{position:fixed;inset:0;z-index:80;background:#fff;opacity:0;pointer-events:none;}
 .flash.go{animation:fl .4s ease;}
 @keyframes fl{12%{opacity:.75;}100%{opacity:0;}}
+.camera-layer{z-index:90;}
+.camera-panel{width:min(620px,calc(100vw - 32px));background:var(--panel);border:1px solid var(--cian);border-radius:20px;overflow:hidden;box-shadow:0 0 35px rgba(34,211,238,.25);}
+.camera-video{display:block;width:100%;max-height:65vh;aspect-ratio:4/3;object-fit:cover;background:#000;}
+.camera-actions{display:flex;gap:10px;padding:16px;}
+.camera-actions .bt{flex:1;}
+.camera-error{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:95;width:min(520px,calc(100% - 32px));}
+@media (max-width:600px){.camera-actions{flex-direction:column;}.camera-video{max-height:55vh;}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
