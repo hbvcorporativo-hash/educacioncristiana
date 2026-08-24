@@ -1,9 +1,10 @@
 import './globals.css'
+import { publicAsset } from '@/lib/assets'
 
 export const metadata = {
   title: 'ANTIVIRUS ADN · Identidad en Cristo',
   description: 'Recupera tu identidad en Cristo',
-  icons: { icon: '/favicon.png' }
+  icons: { icon: publicAsset('/favicon.png') }
 }
 
 export const viewport = {

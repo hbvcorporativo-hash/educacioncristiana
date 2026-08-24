@@ -1,2 +1,4 @@
-export const LOGO = '/logo.png'
-export const HUELLA = '/huella.jpg'
+import { publicAsset } from '@/lib/assets'
+
+export const LOGO = publicAsset('/logo.png')
+export const HUELLA = publicAsset('/huella.jpg')

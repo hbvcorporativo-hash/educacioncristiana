@@ -9,8 +9,9 @@ import ADN from './ADN'
 import AvatarView from './AvatarView'
 import MatrixLoader from './MatrixLoader'
 import { chispas, bandera, flash, confeti } from './efectos'
+import { publicAsset } from '@/lib/assets'
 
-const LOGO = '/logo.png'
+const LOGO = publicAsset('/logo.png')
 
 export default function Game() {
   /* ===== STATE ===== */
@@ -816,19 +817,19 @@ function JesusBox() {
     img.onload = () => setOk(true)
     img.onerror = () => setOk(false)
     img.alt = 'Jesús'
-    img.src = 'final/jesus.jpg'
+    img.src = publicAsset('/final/jesus.jpg')
   }, [])
   if (ok) {
     return (
       <div className="jesus" id="jesusBox">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="final/jesus.jpg" alt="Jesús" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <img src={publicAsset('/final/jesus.jpg')} alt="Jesús" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     )
   }
   return (
     <div className="jesus" id="jesusBox">
-      <div className="aviso-img mono">[ imagen final ]<br />Coloca tu imagen en<br /><b>final/jesus.jpg</b></div>
+      <div className="aviso-img mono">[ imagen final ]<br />Coloca tu imagen en<br /><b>public/final/jesus.jpg</b></div>
     </div>
   )
 }
