@@ -255,7 +255,7 @@ export default function Game() {
   function pista() {
     sfx.tap()
     voz.hablar(nv[actual].pista)
-    avisar('💡 escucha la pista de Leo', 'tip')
+    avisar(`💡 escucha la pista de ${agente === 'mujer' ? 'Sara' : 'Leo'}`, 'tip')
   }
 
   function cerrarRevelar() {
@@ -720,8 +720,8 @@ export default function Game() {
               </div>
             </div>
             <div className="vol">
-              <span style={{ fontSize: 13 }}>Voces de Leo</span>
-              <input type="range" min="0" max="100" value={volVoz} aria-label="Volumen de las voces de Leo"
+              <span style={{ fontSize: 13 }}>Voces de {agente === 'mujer' ? 'Sara' : 'Leo'}</span>
+              <input type="range" min="0" max="100" value={volVoz} aria-label={`Volumen de las voces de ${agente === 'mujer' ? 'Sara' : 'Leo'}`}
                 onChange={e => { const v = +e.target.value; setVolVoz(v); voz.volumenDeVoz(v / 100) }} />
               <span className="mono" style={{ fontSize: 12, width: 34, textAlign: 'right' }}>{volVoz}</span>
             </div>
