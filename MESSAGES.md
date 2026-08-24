@@ -15,7 +15,9 @@ Este documento define el contenido editable de la aplicación Next.js: las voces
 | `mal-1`, `mal-2` | Respuesta aleatoria tras un código incorrecto |
 | `gana` | Mensaje de victoria final |
 
-El reproductor intenta cargar `voces/<clave>.mp3`. Si el archivo no existe, usa `SpeechSynthesisUtterance` en español (`es-ES`). El texto también se muestra en el globo de Leo.
+El reproductor carga MP3 por agente: `voces/leo/<clave>.mp3` para Leo y `voces/sara/<clave>.mp3` para Sara. Leo comparte sus archivos entre los perfiles natural y de sistema. Los archivos son obligatorios; si falta o no puede reproducirse uno, el juego continúa y restaura la música. El texto también se muestra en el globo del agente.
+
+Los MP3 definitivos usan `es-US-AlonsoNeural` para Leo y `es-US-PalomaNeural` para Sara, con dirección de agente secreto tecnológico, estéreo, 44.1 kHz y 128 kbps CBR. Sara debe decir en `intro`: “Aquí Sara, su aliada en el sistema…”.
 
 ## Guion actual
 
@@ -105,7 +107,7 @@ Por tanto, `Juan 1:12`, `JUAN-1:12` y `juan 1 12` se comparan como el mismo cód
 ## Reglas de edición
 
 - Mantener las claves de `VOCES` si ya están referenciadas por un nivel o botón.
-- Si se crea una voz nueva, agregar también su archivo MP3 opcional en `voces/` y documentarla aquí.
+- Si se crea una voz nueva, agregar sus MP3 en `public/voces/leo/` y `public/voces/sara/`, usando audio estéreo a 44.1 kHz y 128 kbps CBR, y documentarla aquí.
 - Mantener coherentes `clave`, `pista`, `reto` y `tarjetas`.
 - Revisar las citas bíblicas y el lenguaje con el responsable educativo antes de publicar.
 - Evitar instrucciones que impliquen contacto físico, humillación, burlas hirientes o riesgos de seguridad.

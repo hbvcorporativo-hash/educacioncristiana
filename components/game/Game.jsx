@@ -58,7 +58,6 @@ export default function Game() {
   /* ===== INIT ===== */
   useEffect(() => {
     nuevasSeeds()
-    voz.initVoces()
     voz.registrarUI({ setTexto: t => setGlobo(t), setHabla: v => setLeoHabla(v) })
     return () => { pararReloj(); detenerCamara(); voz.pararVoz(); musica.parar() }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -713,7 +712,7 @@ export default function Game() {
             <div className="hoja-top"><h3>🎙 Voces de {agente === 'mujer' ? 'Sara' : 'Leo'}</h3>
               <button className="hud-ico" onClick={() => setCapaGuion(false)}>✕</button></div>
             <div className="hoja-int">
-              Graba cada línea y guárdala como <code>[nombre].mp3</code> en una carpeta <code>voces/</code>. Si no existen, {agente === 'mujer' ? 'Sara' : 'Leo'} usa la voz del navegador.
+              Cada línea requiere un MP3 estéreo colombiano en <code>public/voces/{agente === 'mujer' ? 'sara' : 'leo'}/</code>. Leo usa la misma colección para voz natural y de sistema.
             </div>
             <div className="agent-picker">
               <div className="op-tit">Agente de voz</div>
@@ -732,8 +731,8 @@ export default function Game() {
             <div className="hoja-cuerpo" id="cuerpoGuion">
               {Object.entries(VOCES).map(([k, v]) => (
                 <div className="linea" key={k}>
-                  <div className="f mono">voces/{k}.mp3</div>
-                  <div className="t">&quot;{v}&quot;</div>
+                  <div className="f mono">voces/{agente === 'mujer' ? 'sara' : 'leo'}/{k}.mp3</div>
+                  <div className="t">&quot;{agente === 'mujer' ? v.replace(/Leo/g, 'Sara').replace(/aliado/g, 'aliada') : v}&quot;</div>
                 </div>
               ))}
             </div>

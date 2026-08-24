@@ -6,9 +6,9 @@ El audio de la aplicación tiene tres canales independientes:
 
 - **SFX:** efectos sintetizados con Web Audio API. No requieren archivos MP3.
 - **Música:** un elemento `Audio` en bucle que busca `revolution.mp3` y nombres alternativos.
-- **Voz de Leo:** intenta un MP3 por mensaje y usa `SpeechSynthesis` como respaldo.
+- **Voces de Leo y Sara:** usan MP3 pregrabados por mensaje y perfil, sin síntesis del navegador.
 
-La aplicación actual mantiene las rutas esperadas de voces MP3 y el fallback de Speech Synthesis. El único recurso musical disponible actualmente es `public/canciones/revolution.mp3`; los audios de voz pueden agregarse de forma opcional en `public/voces/`.
+La aplicación carga las voces desde `public/voces/leo/<clave>.mp3` y `public/voces/sara/<clave>.mp3`. Los 36 MP3 son parte requerida de la publicación. El único recurso musical disponible actualmente es `public/canciones/revolution.mp3`.
 
 ## Opciones consideradas
 
@@ -53,23 +53,28 @@ Cuando todas las fuentes fallan, el reproductor debe quedar listo para intentar 
 
 **Decisión:** reiniciar el estado al agotar fuentes y permitir reintentos posteriores.
 
-### 7. Fallback de voz resistente
+### 7. Voces pregrabadas definitivas
 
-El navegador puede entregar una lista vacía de voces al inicio. El sistema debe escuchar `voiceschanged`, seleccionar preferentemente una voz española y reintentar una vez si la lista aún no está disponible.
+Cada una de las 18 claves debe existir para Leo y Sara, con dirección de agente secreto tecnológico y voz clara. Leo usa `es-US-AlonsoNeural` y Sara `es-US-PalomaNeural`; `principal` y `sistema` comparten la colección de Leo.
 
-**Decisión:** mantener fallback inmediato a Speech Synthesis y repetir la preparación de voces sin bloquear la interfaz.
+**Decisión:** usar exclusivamente MP3 para eliminar diferencias de síntesis entre navegadores. Si un archivo falla o el navegador bloquea su reproducción, la interfaz finaliza la locución, restaura la música y permite seguir jugando.
 
 ### 8. Proveer todos los MP3 de voz
 
-Se podrían agregar los 18 archivos: `intro`, `n1`-`n6`, `p1`-`p6`, `bien-1`, `bien-2`, `mal-1`, `mal-2` y `gana`.
+La entrega requiere 36 archivos: `intro`, `n1`-`n6`, `p1`-`p6`, `bien-1`, `bien-2`, `mal-1`, `mal-2` y `gana`, en ambas carpetas:
 
-**Limitación:** esos audios no existen dentro del `index.html` original y no se pueden extraer de él. Deben ser grabados o entregados como archivos externos. Mientras tanto, Speech Synthesis es el comportamiento oficial de respaldo.
+```text
+public/voces/leo/<clave>.mp3
+public/voces/sara/<clave>.mp3
+```
+
+Deben exportarse como MP3 estéreo, 44.1 kHz y 128 kbps CBR. El guion de Sara cambia “Aquí Leo, su aliado” por “Aquí Sara, su aliada” en `intro`.
 
 ## Resultado esperado
 
 - Música funcional con `public/canciones/revolution.mp3`.
 - SFX funcionales sin archivos externos.
-- Voz funcional mediante MP3 si existe y Speech Synthesis si no existe.
+- Voces funcionales mediante los 36 MP3 definitivos requeridos, con recuperación limpia ante errores de reproducción.
 - Rutas compatibles con raíz y subruta.
 - Reintento de música después de errores 404 o bloqueos temporales.
 - El loader no interfiere con las políticas de reproducción del navegador.
