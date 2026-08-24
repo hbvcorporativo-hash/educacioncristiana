@@ -1,0 +1,6 @@
+node_modules/
+.next/
+out/
+opencode.json
+*:Zone.Identifier
+*.Zone.Identifier
