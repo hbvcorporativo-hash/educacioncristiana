@@ -604,7 +604,7 @@ Al actualizar, agregar entrada:
 
 ## ✅ Checklist de Merge
 
-Antes de merear cambios:
+Antes de fusionar cambios:
 
 - [ ] Código sigue convenciones de naming
 - [ ] Sin librerías externas agregadas
@@ -622,9 +622,9 @@ Antes de merear cambios:
 
 ### Día 1: Entendimiento
 1. Leer README.md completo
-2. Abrir index.html en navegador y explorar
-3. Abrir DevTools (F12) y revisar estructura HTML
-4. Buscar variables globales en JS
+2. Ejecutar `npm install` y `npm run dev`
+3. Abrir `http://localhost:3000` y revisar la aplicación con DevTools
+4. Identificar el componente y el módulo de datos implicados en el cambio
 
 ### Día 2: Arquitectura
 1. Leer GUARDRAILS.md (este documento)

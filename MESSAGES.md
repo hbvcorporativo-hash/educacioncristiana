@@ -1,6 +1,6 @@
 # Mensajes y Contenido
 
-Este documento define el contenido editable de `index.html`: las voces de Leo y la configuración de los seis niveles. El contenido se encuentra en las constantes `VOCES` y `NIVELES`, dentro del bloque `CONTENIDO EDITABLE`.
+Este documento define el contenido editable de la aplicación Next.js: las voces de Leo y la configuración de los seis niveles. El contenido se encuentra en las constantes `VOCES` y `NIVELES` de `lib/data.js`.
 
 ## Modelo de mensajes
 

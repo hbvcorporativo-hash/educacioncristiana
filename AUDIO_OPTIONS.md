@@ -8,13 +8,13 @@ El audio de la aplicación tiene tres canales independientes:
 - **Música:** un elemento `Audio` en bucle que busca `revolution.mp3` y nombres alternativos.
 - **Voz de Leo:** intenta un MP3 por mensaje y usa `SpeechSynthesis` como respaldo.
 
-El `index.html` original no contiene voces MP3 embebidas. Solo contiene las rutas esperadas y el código de fallback. El único recurso musical recuperado del proyecto es `public/canciones/revolution.mp3`.
+La aplicación actual mantiene las rutas esperadas de voces MP3 y el fallback de Speech Synthesis. El único recurso musical disponible actualmente es `public/canciones/revolution.mp3`; los audios de voz pueden agregarse de forma opcional en `public/voces/`.
 
 ## Opciones consideradas
 
 ### 1. Mantener rutas relativas como el original
 
-Usar `canciones/revolution.mp3` y `voces/<id>.mp3` permite que los recursos funcionen en la raíz y en una aplicación publicada bajo una subruta, siempre que la página tenga una URL base correcta.
+Usar rutas relativas como `canciones/revolution.mp3` y `voces/<id>.mp3` permite que los recursos funcionen en localhost y en una aplicación publicada bajo una subruta, siempre que la página tenga una URL base correcta.
 
 **Ventaja:** conserva el comportamiento original y evita asumir que la aplicación vive en `/`.
 
