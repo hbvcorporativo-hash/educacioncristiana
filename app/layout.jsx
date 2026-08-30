@@ -1,4 +1,4 @@
-import './globals.css'
+import './styles/globals.scss'
 import { publicAsset } from '@/lib/assets'
 
 export const metadata = {

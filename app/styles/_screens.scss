@@ -1,0 +1,85 @@
+.pantalla {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 500px;
+  z-index: 10;
+  display: none;
+  flex-direction: column;
+  background:
+    linear-gradient(180deg, rgba(6, 11, 20, .6), rgba(6, 11, 20, .92)),
+    radial-gradient(700px 500px at 50% -10%, #12304F, #060B14 68%);
+  box-shadow: 0 0 80px rgba(0, 0, 0, .6);
+  transition: max-width .3s ease;
+
+  &.on {
+    display: flex;
+  }
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.col {
+  padding: 18px 18px calc(26px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+@media (min-width: 768px) {
+  .pantalla {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .col {
+    padding: 32px 40px calc(40px + env(safe-area-inset-bottom));
+    gap: 20px;
+  }
+
+  #pAvatar .col > .av-caja {
+    max-width: 340px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  #pAvatar .col .op-grupo {
+    display: block;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  #pAvatar .col .op-grupo:nth-of-type(2) {
+    grid-template-columns: 1fr;
+  }
+
+  #pAvatar .col .op-grupo:nth-of-type(2) .galeria {
+    grid-template-columns: repeat(8, 1fr);
+    gap: 10px;
+  }
+
+  .gal-op {
+    aspect-ratio: 2;
+  }
+
+  #pMapa .col > .estado {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+
+  #listaNiveles {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px !important;
+  }
+}

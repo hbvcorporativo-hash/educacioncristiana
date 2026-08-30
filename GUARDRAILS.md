@@ -72,7 +72,7 @@ Estas reglas mantienen la aplicación estable, exportable y fácil de mantener. 
 - Reutilizar componentes, funciones y utilidades existentes.
 - No agregar dependencias sin justificar su necesidad y actualizar `package.json` y `package-lock.json`.
 - No agregar comentarios al código salvo que se soliciten expresamente.
-- Preservar `.pantalla` y `.pantalla.on` en `app/globals.css`.
+- Preservar `.pantalla` y `.pantalla.on` en `app/styles/_screens.scss`.
 - Mantener la interfaz responsive para móvil, tablet y escritorio.
 - No registrar secretos, tokens ni datos personales en consola.
 

@@ -389,12 +389,10 @@ export default function Game() {
       <div className={'pantalla' + (pantalla === 'intro' ? ' on' : '')} id="intro">
         <div className="scroll" ref={el => (scrollRefs.current['intro'] = el)}><div className="col">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="logo-top logo-img" alt="El Lugar de Su Presencia" src={LOGO} />
           <ADN xl fraccion={fraccion} />
           <div className="alerta mono">● AMENAZA DETECTADA</div>
           <h1 className="tit-hack">ANTIVIRUS ADN</h1>
           <div className="tit-sub">Hackea el virus · recupera tu identidad</div>
-          <div className="virus-nom">&lt;COMPARACIÓN&gt;</div>
           <div className="brief">
             Hoy sus identidades están siendo atacadas por un virus. El virus se llama <b>COMPARACIÓN</b>. Se mete por las redes, los comentarios, el colegio, los amigos y hasta por nuestros propios pensamientos.<br /><br />
             Su misión: superar <b>6 niveles</b>, detectar las mentiras y recuperar el código de su verdadera identidad.
@@ -791,6 +789,7 @@ function HUD({ fraccion, pct, puntos, onMusica, onGuion, onSonido, muteSfx }) {
       <button className="hud-ico btnMusica" onClick={onMusica}>🎵</button>
       <button className="hud-ico btnSonido" onClick={onSonido}>{muteSfx ? '🔇' : '🔊'}</button>
       <button className="hud-ico btnGuion" onClick={onGuion}>🎙</button>
+      <button className="hud-ico btnAyuda" onClick={() => window.open('/ayuda', '_blank')} title="¿Cómo jugar?">?</button>
     </div>
   )
 }
