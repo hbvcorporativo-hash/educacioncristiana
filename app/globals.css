@@ -312,3 +312,45 @@ input{font-family:var(--f);}
 .camera-error{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:95;width:min(520px,calc(100% - 32px));}
 @media (max-width:600px){.camera-actions{flex-direction:column;}.camera-video{max-height:55vh;}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+
+/* ===== AYUDA / HOW-TO-PLAY ===== */
+.ayuda-container{max-width:680px;margin:0 auto;padding:24px 18px 48px;color:var(--txt);}
+.ayuda-hero{text-align:center;padding:32px 0 24px;}
+.ayuda-hero-alerta{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.14em;color:var(--cian);border:1.5px solid var(--cian);border-radius:20px;padding:6px 14px;background:rgba(34,211,238,.1);margin-bottom:14px;}
+.ayuda-hero-tit{font-size:clamp(30px,8vw,46px);letter-spacing:.02em;line-height:1;background:linear-gradient(180deg,#fff,var(--cian));-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 8px;}
+.ayuda-hero-sub{font-family:var(--m);font-size:13px;letter-spacing:.18em;color:var(--gris);text-transform:uppercase;margin:0;}
+.ayuda-seccion{margin-top:32px;}
+.ayuda-seccion-tit{display:flex;align-items:center;gap:10px;font-size:20px;margin:0 0 14px;}
+.ayuda-seccion-ico{font-size:22px;}
+.ayuda-mision{background:var(--panel);border:1px solid var(--linea);border-left:3px solid var(--virus);border-radius:12px;padding:16px;font-size:15px;line-height:1.65;color:#C9DCEE;}
+.ayuda-mision b{color:var(--cian);}
+.ayuda-pasos{display:flex;flex-direction:column;gap:14px;}
+.ayuda-paso{display:flex;gap:14px;background:var(--panel);border:1px solid var(--linea);border-radius:16px;padding:16px;align-items:flex-start;}
+.ayuda-paso-num{font-family:var(--m);font-size:28px;font-weight:700;color:var(--cian);opacity:.35;line-height:1;flex:0 0 40px;text-align:center;}
+.ayuda-paso-ico{font-size:26px;flex:0 0 36px;text-align:center;}
+.ayuda-paso-info{flex:1;min-width:0;}
+.ayuda-paso-tit{font-size:16px;font-weight:700;color:var(--txt);margin-bottom:4px;}
+.ayuda-paso-desc{font-size:14px;color:#C4D8EA;line-height:1.5;}
+.ayuda-paso-detalle{font-size:13px;color:var(--gris);margin-top:6px;line-height:1.5;}
+.ayuda-niveles{display:flex;flex-direction:column;gap:10px;}
+.ayuda-nivel{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--linea);border-radius:14px;padding:12px;}
+.ayuda-nivel-n{font-family:var(--m);font-weight:700;font-size:16px;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#5CE9F8,var(--cian));color:#04222A;flex:0 0 auto;}
+.ayuda-nivel-ico{font-size:22px;flex:0 0 30px;text-align:center;}
+.ayuda-nivel-info{flex:1;min-width:0;}
+.ayuda-nivel-tit{font-size:15px;font-weight:700;}
+.ayuda-nivel-reto{font-size:13px;color:#C4D8EA;margin-top:2px;}
+.ayuda-nivel-pieza{font-family:var(--m);font-size:11px;color:var(--oro);margin-top:3px;}
+.ayuda-consejos{display:flex;flex-direction:column;gap:10px;}
+.ayuda-consejo{display:flex;gap:12px;background:var(--panel);border:1px solid var(--linea);border-radius:14px;padding:14px;font-size:14px;line-height:1.5;color:#C4D8EA;align-items:flex-start;}
+.ayuda-consejo-ico{font-size:20px;flex:0 0 28px;text-align:center;}
+.ayuda-consejo b{color:var(--cian);}
+.ayuda-armadura{background:var(--panel);border:1px solid var(--linea);border-radius:14px;padding:16px;}
+.ayuda-armadura p{margin:0 0 12px;font-size:14px;color:#C4D8EA;}
+.ayuda-armadura b{color:var(--cian);}
+.ayuda-armadura-lista{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ayuda-arm-item{display:flex;align-items:center;gap:8px;font-size:14px;padding:8px 12px;background:var(--panel2);border:1px solid var(--linea);border-radius:10px;}
+.ayuda-arm-item span{font-size:18px;}
+.ayuda-footer{text-align:center;margin-top:36px;padding-top:20px;border-top:1px solid var(--linea);}
+.ayuda-volver{display:inline-flex;align-items:center;gap:6px;color:var(--cian);font-size:15px;font-weight:700;text-decoration:none;padding:12px 24px;border:2px solid var(--cian);border-radius:14px;transition:all .15s;}
+.ayuda-volver:hover{background:rgba(34,211,238,.1);}
+@media (max-width:480px){.ayuda-armadura-lista{grid-template-columns:1fr;}.ayuda-paso-num{display:none;}}

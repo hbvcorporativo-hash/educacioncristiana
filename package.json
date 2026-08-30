@@ -9,7 +9,9 @@
     "preview": "npx serve out"
   },
   "dependencies": {
+    "docx": "^9.7.1",
     "next": "^15.1.6",
+    "qrcode": "^1.5.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   }
