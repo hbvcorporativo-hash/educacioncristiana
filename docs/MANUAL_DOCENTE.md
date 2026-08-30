@@ -231,7 +231,7 @@ Los estudiantes también reciben 3 fragmentos: AMADO, HIJO, DIOS.
    - Si es incorrecto → "ACCESS DENIED", pueden reintentar sin penalización.
 7. **Continuar:** Presionan "CONTINUAR" para volver al mapa.
 
-**Importante:** Sin foto de evidencia, el código NUNCA se validará. La foto es obligatoria.
+**Importante:** La foto es opcional pero recomendada como evidencia del reto. Si no tienen cámara o permisos, pueden escribir directamente el código.
 
 ---
 

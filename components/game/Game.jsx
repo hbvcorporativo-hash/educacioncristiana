@@ -220,7 +220,6 @@ export default function Game() {
 
   function hackear() {
     const x = nv[actual]
-    if (!x.foto) { avisar('📸 falta la evidencia del reto', 'mal'); sfx.mal(); return }
     const v = claveVal
     if (!v.trim()) { avisar('introduce el código', 'mal'); return }
     if (norm(v) !== norm(x.clave)) {
@@ -598,14 +597,14 @@ export default function Game() {
               </div>
             </div>
             <div className="caja">
-              <div className="eti">📸 Evidencia del equipo</div>
+              <div className="eti">📸 Evidencia del equipo (opcional)</div>
               <div className={'foto-caja' + (nivelX.foto ? ' foto-ok' : '')} id="fotoCaja">
                 {nivelX.foto
                   ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={nivelX.foto} alt="evidencia" />
                   )
-                  : <div className="foto-vacia">Tomen la foto del reto terminado</div>}
+                  : <div className="foto-vacia">Tomen la foto del reto terminado (opcional)</div>}
               </div>
               {!nivelX.hecho && (
                 <button className="bt ghost" id="btnFoto" onClick={abrirCamara}>

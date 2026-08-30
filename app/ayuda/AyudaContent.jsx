@@ -36,7 +36,7 @@ const PASOS = [
     titulo: 'Toma Foto y Escribe el Código',
     desc: 'Captura evidencia del reto completado y escribe el código que descubriste.',
     icono: '📸',
-    detalle: 'La foto es obligatoria. Sin ella el código no funciona. El código acepta espacios, mayúsculas y tildes sin problema.'
+    detalle: 'La foto es opcional. Si no tienes cámara o permisos, puedes escribir directamente el código. El código acepta espacios, mayúsculas y tildes sin problema.'
   },
   {
     num: '06',
@@ -130,7 +130,7 @@ export default function AyudaContent() {
         <div className="ayuda-consejos">
           <div className="ayuda-consejo">
             <span className="ayuda-consejo-ico">📷</span>
-            <div><b>La foto es obligatoria.</b> Sin evidencia del reto, el código nunca funcionará.</div>
+            <div><b>La foto es opcional.</b> Te ayuda como evidencia, pero si no tienes cámara puedes escribir el código directamente.</div>
           </div>
           <div className="ayuda-consejo">
             <span className="ayuda-consejo-ico">⌨️</span>
