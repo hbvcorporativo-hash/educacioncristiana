@@ -1,0 +1,49 @@
+.bt {
+  border-radius: 14px;
+  padding: 15px 20px;
+  font-size: 16px;
+  width: 100%;
+  text-align: center;
+  transition: transform .1s, box-shadow .1s, filter .2s;
+
+  &:active {
+    transform: translateY(3px);
+  }
+
+  &.cian {
+    background: linear-gradient(180deg, #5CE9F8, var(--cian));
+    color: #04222A;
+    box-shadow: 0 5px 0 var(--cian-d);
+
+    &:active { box-shadow: 0 2px 0 var(--cian-d); }
+  }
+
+  &.verde {
+    background: linear-gradient(180deg, #5CF0B6, var(--verde));
+    color: #042A1C;
+    box-shadow: 0 5px 0 var(--verde-d);
+
+    &:active { box-shadow: 0 2px 0 var(--verde-d); }
+  }
+
+  &.oro {
+    background: linear-gradient(180deg, #FFDD7C, var(--oro));
+    color: #3A2A00;
+    box-shadow: 0 5px 0 var(--oro-d);
+
+    &:active { box-shadow: 0 2px 0 var(--oro-d); }
+  }
+
+  &.ghost {
+    background: rgba(34, 211, 238, .08);
+    color: var(--cian);
+    border: 2px solid var(--linea);
+  }
+
+  &:disabled {
+    background: #16273D;
+    color: #4E6C8B;
+    box-shadow: none;
+    cursor: default;
+  }
+}

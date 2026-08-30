@@ -55,7 +55,13 @@ No hay actualmente un script de pruebas automatizadas ni de lint configurado en 
 
 ```text
 app/
-├── globals.css       # Estilos globales
+├── styles/
+│   ├── globals.scss    # Entry point Sass
+│   ├── _variables.scss # CSS custom properties + fonts
+│   ├── _base.scss      # Resets y utilidades globales
+│   ├── _buttons.scss   # Componente botones
+│   ├── _screens.scss   # Layout de pantallas
+│   └── ...             # 11 partials más por componente
 ├── layout.jsx        # Layout y metadatos
 └── page.jsx          # Entrada de la aplicación
 components/game/      # Pantallas, juego y componentes visuales

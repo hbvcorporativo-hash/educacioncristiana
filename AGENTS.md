@@ -14,7 +14,7 @@
 - `app/page.jsx` is the application entrypoint and mounts `components/game/Game.jsx`.
 - `Game.jsx` is client-only and owns the state machine for `intro`, `pAvatar`, `pMapa`, `pNivel`, and `final`.
 - Editable game content, level definitions, codes, and voice text live in `lib/data.js`.
-- `app/globals.css` is the port of the original `index.html` styles. Preserve `.pantalla` and `.pantalla.on`, which control screen visibility.
+- `app/styles/globals.scss` is the main Sass entry point importing 15 partials (`_variables`, `_base`, `_buttons`, etc.). Preserve `.pantalla` and `.pantalla.on` in `_screens.scss`, which control screen visibility.
 
 ## Browser-only behavior
 

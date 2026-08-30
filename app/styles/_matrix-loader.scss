@@ -1,0 +1,107 @@
+.matrix-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #000;
+  color: #00FF41;
+  font-family: var(--m);
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(0deg, rgba(0, 255, 65, .035) 0 1px, transparent 1px 4px);
+  }
+}
+
+.matrix-rain {
+  position: absolute;
+  inset: -15%;
+  display: flex;
+  justify-content: space-around;
+  overflow: hidden;
+  opacity: .42;
+  color: #00FF41;
+  font-size: 17px;
+  line-height: 1.15;
+  white-space: pre;
+  filter: drop-shadow(0 0 5px #00FF41);
+
+  span {
+    writing-mode: vertical-rl;
+    animation: matrixFall 3.8s linear infinite;
+  }
+}
+
+.matrix-terminal {
+  position: relative;
+  z-index: 1;
+  width: min(420px, calc(100% - 36px));
+  padding: 24px 20px;
+  border: 1px solid #00FF41;
+  background: rgba(0, 10, 3, .9);
+  box-shadow: 0 0 28px rgba(0, 255, 65, .45), inset 0 0 24px rgba(0, 255, 65, .08);
+  text-shadow: 0 0 8px rgba(0, 255, 65, .8);
+}
+
+.matrix-top {
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(0, 255, 65, .45);
+  font-size: 11px;
+  letter-spacing: .08em;
+
+  b {
+    font-weight: 400;
+    opacity: .7;
+  }
+}
+
+.matrix-title {
+  margin: 28px 0 20px;
+  font-size: clamp(17px, 4.5vw, 22px);
+  letter-spacing: .08em;
+  animation: matrixPulse .8s steps(2) infinite;
+}
+
+.matrix-bar {
+  height: 8px;
+  border: 1px solid #00FF41;
+  padding: 1px;
+
+  div {
+    height: 100%;
+    background: #00FF41;
+    box-shadow: 0 0 10px #00FF41;
+    transition: width .05s linear;
+  }
+}
+
+.matrix-progress {
+  margin-top: 12px;
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+
+.matrix-status {
+  margin-top: 20px;
+  font-size: 11px;
+  opacity: .8;
+}
+
+.matrix-cursor {
+  animation: parpadeo .55s steps(1) infinite;
+}
+
+@keyframes matrixFall {
+  from { transform: translateY(-35%); }
+  to { transform: translateY(35%); }
+}
+
+@keyframes matrixPulse {
+  50% { opacity: .65; }
+}

@@ -1,0 +1,50 @@
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--f);
+  color: var(--txt);
+  overflow: hidden;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  background: radial-gradient(900px 620px at 50% -12%, #12304F, #060B14 65%);
+}
+
+button {
+  font-family: var(--f);
+  font-weight: 700;
+  cursor: pointer;
+  border: 0;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  font-weight: 700;
+}
+
+input {
+  font-family: var(--f);
+}
+
+.mono {
+  font-family: var(--m);
+}
+
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .55;
+  background-image:
+    linear-gradient(rgba(34, 211, 238, .06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, .06) 1px, transparent 1px);
+  background-size: 38px 38px;
+}

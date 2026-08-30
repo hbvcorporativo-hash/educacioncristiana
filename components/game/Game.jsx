@@ -389,7 +389,6 @@ export default function Game() {
       <div className={'pantalla' + (pantalla === 'intro' ? ' on' : '')} id="intro">
         <div className="scroll" ref={el => (scrollRefs.current['intro'] = el)}><div className="col">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="logo-top logo-img" alt="El Lugar de Su Presencia" src={LOGO} />
           <ADN xl fraccion={fraccion} />
           <div className="alerta mono">● AMENAZA DETECTADA</div>
           <h1 className="tit-hack">ANTIVIRUS ADN</h1>

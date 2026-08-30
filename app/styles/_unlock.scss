@@ -1,0 +1,117 @@
+.capa {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(4, 9, 17, .88);
+  backdrop-filter: blur(5px);
+
+  &.on { display: flex; }
+}
+
+.rv {
+  position: relative;
+  background: linear-gradient(170deg, #10243D, #0A1524);
+  border: 1px solid var(--oro);
+  border-radius: 22px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  padding: 26px 22px 22px;
+  overflow: hidden;
+  animation: rvIn .5s cubic-bezier(.2, 1.35, .4, 1);
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -110px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 197, 49, .28), transparent 68%);
+  }
+}
+
+@keyframes rvIn {
+  0% { opacity: 0; transform: scale(.87) translateY(16px); }
+  100% { opacity: 1; transform: none; }
+}
+
+.rv-eti {
+  position: relative;
+  font-family: var(--m);
+  font-size: 11px;
+  letter-spacing: .2em;
+  color: var(--verde);
+  text-transform: uppercase;
+}
+
+.rv-ico {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  margin: 14px auto 12px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  background: linear-gradient(160deg, rgba(255, 197, 49, .28), rgba(255, 197, 49, .1));
+  border: 1px solid var(--oro);
+  box-shadow: 0 0 32px rgba(255, 197, 49, .4);
+  animation: brota .8s cubic-bezier(.2, 1.5, .4, 1);
+}
+
+@keyframes brota {
+  0% { transform: scale(.4) rotate(-12deg); opacity: 0; }
+  60% { transform: scale(1.08); }
+  100% { transform: none; }
+}
+
+.rv-nom {
+  position: relative;
+  font-size: clamp(21px, 6vw, 27px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--oro);
+}
+
+.rv-ver {
+  position: relative;
+  font-family: var(--m);
+  font-size: 12px;
+  color: var(--cian);
+  margin-top: 6px;
+}
+
+.rv-di {
+  position: relative;
+  font-family: var(--m);
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--gris);
+  margin-top: 15px;
+}
+
+.rv-dec {
+  position: relative;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--verde);
+  margin: 6px 0 11px;
+  line-height: 1.3;
+}
+
+.rv-pts {
+  position: relative;
+  font-family: var(--m);
+  font-size: 13px;
+  color: var(--oro);
+  margin-bottom: 15px;
+}
