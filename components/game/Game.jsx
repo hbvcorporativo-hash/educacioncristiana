@@ -658,7 +658,7 @@ export default function Game() {
           <ADN xl fraccion={fraccion} />
           <JesusBox />
           <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6, color: '#C9DCEE' }}>
-            El virus mentía. Esta es la verdad: no tienes que compararte con nadie, porque Él ya te escogió.
+            El virus mentía. Esta es la verdad: no tienes que compararte con nadie, porque Él ya te ha diseñado unico, y no hay nadie igual a ti, te ha escogido desde antes que nacieras y te hizo obra MAESTRA.
           </p>
           <div className="tarjeta-id" id="tarjetaId">
             <div className="ti-top">
@@ -826,19 +826,19 @@ function JesusBox() {
     img.onload = () => setOk(true)
     img.onerror = () => setOk(false)
     img.alt = 'Jesús'
-    img.src = publicAsset('/final/jesus.jpg')
+    img.src = publicAsset('/final/jesus.png')
   }, [])
   if (ok) {
     return (
       <div className="jesus" id="jesusBox">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={publicAsset('/final/jesus.jpg')} alt="Jesús" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <img src={publicAsset('/final/jesus.png')} alt="Jesús" />
       </div>
     )
   }
   return (
     <div className="jesus" id="jesusBox">
-      <div className="aviso-img mono">[ imagen final ]<br />Coloca tu imagen en<br /><b>public/final/jesus.jpg</b></div>
+      <div className="aviso-img mono">[ imagen final ]<br />Coloca tu imagen en<br /><b>public/final/jesus.png</b></div>
     </div>
   )
 }

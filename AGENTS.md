@@ -28,7 +28,7 @@
 - Static assets belong in `public/`.
 - Optional voice files use `public/voces/<id>.mp3`; missing files fall back to Spanish Speech Synthesis.
 - Music uses `public/canciones/revolution.mp3` and the fallback paths defined in `lib/musica.js`.
-- `public/final/jesus.jpg` is optional; the final screen displays a placeholder when it is absent.
+- `public/final/jesus.png` is optional; the final screen displays a placeholder when it is absent.
 - Avatars use DiceBear and must retain the initials fallback when the remote image fails.
 
 ## Documentation and safety
