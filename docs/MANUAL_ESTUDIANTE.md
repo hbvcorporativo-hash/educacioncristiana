@@ -77,7 +77,7 @@ Cada nivel tiene esta secuencia:
 - Toma una foto del trabajo que hicieron.
 - Si no funciona la cámara, puedes seleccionar una imagen de tu galería.
 
-> **La foto es opcional.** Si no tienes cámara o permisos, puedes escribir directamente el código.
+> **La foto es obligatoria.** Sin ella, el código no funcionará.
 
 ### 4. Escribe el código
 
@@ -127,7 +127,7 @@ Cuando completes los 6 niveles:
 ## Consejos
 
 - **No se pueden saltar niveles.** Hay que hacerlos en orden.
-- **La foto es opcional.** Te ayuda como evidencia, pero si no tienes cámara puedes escribir el código directamente.
+- **La foto es obligatoria.** El código nunca funciona sin evidencia.
 - **El código es flexible.** Espacios, mayúsculas y tildes no importan. "Juan 1:12" es igual a "juan112".
 - **El cronómetro** te da un bono de puntos si terminas rápido, pero no te preocupes si te tardas. Puedes seguir jugando.
 - **Si sales de un nivel y vuelves,** el cronómetro se reinicia a 5:00.
