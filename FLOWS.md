@@ -118,7 +118,7 @@ El botón de foto abre un `input type="file"` con captura de cámara en disposit
 2. El modal muestra porcentaje restaurado, pieza de armadura, versículo, declaración y puntos ganados.
 3. `CONTINUAR` devuelve al mapa y equipa la pieza visualmente.
 4. Cuando los seis niveles están completos, el mapa habilita “Identidad desbloqueada”.
-5. La pantalla final reproduce `gana`, carga opcionalmente `final/jesus.jpg` y presenta la tarjeta.
+5. La pantalla final reproduce `gana`, carga opcionalmente `final/jesus.png` y presenta la tarjeta.
 6. La tarjeta permite completar tres campos personales y descargar `mi-identidad-adn.png` mediante Canvas.
 
 ## Audio

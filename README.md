@@ -147,6 +147,6 @@ Consulta los documentos especializados:
 
 - `public/canciones/revolution.mp3`: música disponible actualmente.
 - `public/voces/<id>.mp3`: audios opcionales de Leo. Si faltan, se usa Speech Synthesis del navegador.
-- `public/final/jesus.jpg`: imagen opcional de la pantalla final.
+- `public/final/jesus.png`: imagen opcional de la pantalla final con fondo transparente.
 
 No agregues claves, tokens ni configuración local sensible al repositorio. `opencode.json` está excluido por `.gitignore`.

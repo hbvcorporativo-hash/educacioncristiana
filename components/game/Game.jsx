@@ -63,6 +63,19 @@ export default function Game() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(() => {
+    if (pantalla !== 'pNivel' || actual === null) return
+    const x = nv[actual]
+    if (!x) return
+    if (x.hecho) {
+      voz.pararVoz()
+      setGlobo('Sector ya descontaminado. Pueden revisar su evidencia o volver al mapa.')
+      return
+    }
+    setGlobo(VOCES[x.voz] || '…')
+    voz.hablar(x.voz)
+  }, [pantalla, actual])
+
   function nuevasSeeds() {
     const s = Array.from({ length: 8 }, () => Math.random().toString(36).slice(2, 9))
     setSeeds(s)
@@ -126,11 +139,9 @@ export default function Game() {
     setClaveMal(false)
     avisar('', '')
     verPantalla('pNivel')
-    if (!x.hecho) { arrancarReloj(); voz.hablar(x.voz) }
+    if (!x.hecho) arrancarReloj()
     else {
       pararReloj()
-      voz.pararVoz()
-      setGlobo('Sector ya descontaminado. Pueden revisar su evidencia o volver al mapa.')
     }
   }
 
@@ -220,9 +231,9 @@ export default function Game() {
 
   function hackear() {
     const x = nv[actual]
-    if (!x.foto) { avisar('📸 falta la evidencia del reto', 'mal'); sfx.mal(); return }
     const v = claveVal
     if (!v.trim()) { avisar('introduce el código', 'mal'); return }
+    if (!x.foto) { avisar('toma la foto de evidencia antes de validar', 'mal'); return }
     if (norm(v) !== norm(x.clave)) {
       avisar('✖ ACCESS DENIED — código incorrecto', 'mal')
       sfx.mal()
@@ -598,14 +609,14 @@ export default function Game() {
               </div>
             </div>
             <div className="caja">
-              <div className="eti">📸 Evidencia del equipo</div>
+              <div className="eti">📸 Evidencia del equipo (obligatoria)</div>
               <div className={'foto-caja' + (nivelX.foto ? ' foto-ok' : '')} id="fotoCaja">
                 {nivelX.foto
                   ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={nivelX.foto} alt="evidencia" />
                   )
-                  : <div className="foto-vacia">Tomen la foto del reto terminado</div>}
+                   : <div className="foto-vacia">Tomen la foto del reto terminado (obligatoria)</div>}
               </div>
               {!nivelX.hecho && (
                 <button className="bt ghost" id="btnFoto" onClick={abrirCamara}>
@@ -647,7 +658,7 @@ export default function Game() {
           <ADN xl fraccion={fraccion} />
           <JesusBox />
           <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6, color: '#C9DCEE' }}>
-            El virus mentía. Esta es la verdad: no tienes que compararte con nadie, porque Él ya te escogió.
+            El virus mentía. Esta es la verdad: no tienes que compararte con nadie, porque Él ya te ha diseñado unico, y no hay nadie igual a ti, te ha escogido desde antes que nacieras y te hizo obra MAESTRA.
           </p>
           <div className="tarjeta-id" id="tarjetaId">
             <div className="ti-top">
@@ -815,19 +826,19 @@ function JesusBox() {
     img.onload = () => setOk(true)
     img.onerror = () => setOk(false)
     img.alt = 'Jesús'
-    img.src = publicAsset('/final/jesus.jpg')
+    img.src = publicAsset('/final/jesus.png')
   }, [])
   if (ok) {
     return (
       <div className="jesus" id="jesusBox">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={publicAsset('/final/jesus.jpg')} alt="Jesús" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <img src={publicAsset('/final/jesus.png')} alt="Jesús" />
       </div>
     )
   }
   return (
     <div className="jesus" id="jesusBox">
-      <div className="aviso-img mono">[ imagen final ]<br />Coloca tu imagen en<br /><b>public/final/jesus.jpg</b></div>
+      <div className="aviso-img mono">[ imagen final ]<br />Coloca tu imagen en<br /><b>public/final/jesus.png</b></div>
     </div>
   )
 }

@@ -77,7 +77,7 @@ Cada nivel usa esta estructura:
 |---:|---|---|---|---|
 | 1 | CONTRASEÑA | Cinturón de la Verdad | La verdad de Dios sostiene quién soy. | `2314` |
 | 2 | ESCANEA LA MENTIRA | Coraza de Justicia | Soy perdonado y justificado por Cristo. | `AMADO ESCOGIDO PERDONADO PROPOSITO` |
-| 3 | ERROR 404: IDENTIDAD | Yelmo de la Salvación | Mi mente la protege lo que Dios dice de mí. | `RESTAURAR` |
+| 3 | ERROR 404: IDENTIDAD | Yelmo de la Salvación | Mi mente está protegida por lo que Dios dice de mí. | `RESTAURAR` |
 | 4 | CONTRACORRIENTE | Calzado de la Paz | No me amoldo al mundo: estoy firme en Cristo. | `FIRME` |
 | 5 | FIREWALL | Escudo de la Fe | La fe apaga los dardos del enemigo. | `SOY AMADO POR DIOS` |
 | 6 | DESBLOQUEO FINAL | Espada del Espíritu | Soy hijo de Dios: ese es mi código original. | `JUAN 1:12` |
