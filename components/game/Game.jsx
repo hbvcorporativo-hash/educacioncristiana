@@ -63,6 +63,19 @@ export default function Game() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(() => {
+    if (pantalla !== 'pNivel' || actual === null) return
+    const x = nv[actual]
+    if (!x) return
+    if (x.hecho) {
+      voz.pararVoz()
+      setGlobo('Sector ya descontaminado. Pueden revisar su evidencia o volver al mapa.')
+      return
+    }
+    setGlobo(VOCES[x.voz] || '…')
+    voz.hablar(x.voz)
+  }, [pantalla, actual])
+
   function nuevasSeeds() {
     const s = Array.from({ length: 8 }, () => Math.random().toString(36).slice(2, 9))
     setSeeds(s)
@@ -126,11 +139,9 @@ export default function Game() {
     setClaveMal(false)
     avisar('', '')
     verPantalla('pNivel')
-    if (!x.hecho) { arrancarReloj(); voz.hablar(x.voz) }
+    if (!x.hecho) arrancarReloj()
     else {
       pararReloj()
-      voz.pararVoz()
-      setGlobo('Sector ya descontaminado. Pueden revisar su evidencia o volver al mapa.')
     }
   }
 
