@@ -24,6 +24,21 @@ function desordenar(palabra) {
   return palabra[0] + palabra.slice(1, -1).split('').reverse().join('') + palabra[palabra.length - 1]
 }
 
+// Verifica que el desorden conserve TODAS las letras (incluidas repetidas)
+function verificarLetras(palabra, desordenada) {
+  const ordena = s => s.split('').sort().join('')
+  if (ordena(palabra) !== ordena(desordenada)) {
+    throw new Error(`Letras incompletas: ${palabra} no es anagrama de ${desordenada}`)
+  }
+}
+
+// Tamaño de letra que garantiza que la palabra completa quepa en 88vw
+// (mono: ~0.6em/letra + gap .16em + letter-spacing .08em → ancho ≈ 0.84n - 0.24)
+function fontVwPara(palabra) {
+  const n = palabra.length
+  return (88 / (0.84 * n - 0.24)).toFixed(1)
+}
+
 const CIAN = '#00E5FF'
 const CHARS = 'アイウエオカキクケコ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 const COLUMNAS = 14
@@ -35,7 +50,7 @@ function columna(seed) {
   return s.trim()
 }
 
-function paginaHtml(estacion, desordenada) {
+function paginaHtml(estacion, desordenada, fontVw) {
   const letras = desordenada.split('').map((l, i) =>
     `<span style="animation-delay:${(i * 0.14).toFixed(2)}s">${l}</span>`
   ).join('')
@@ -51,14 +66,13 @@ function paginaHtml(estacion, desordenada) {
 <style>
   :root { --cian:${CIAN}; }
   * { box-sizing:border-box; margin:0; padding:0; }
-  html, body { height:100%; }
+  html, body { height:100%; overflow:hidden; }
   body {
     background:#000;
     font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Consolas,monospace;
-    overflow:hidden;
   }
   .lluvia {
-    position:absolute; inset:-15%;
+    position:absolute; top:-15%; bottom:-15%; left:0; right:0;
     display:flex; justify-content:space-around;
     overflow:hidden; opacity:.42;
     color:var(--cian); font-size:17px; line-height:1.15;
@@ -73,9 +87,10 @@ function paginaHtml(estacion, desordenada) {
   }
   .palabra {
     position:absolute; inset:0; z-index:1;
-    display:flex; align-items:center; justify-content:center; gap:.16em;
+    display:flex; align-items:center; justify-content:center;
+    gap:.16em; flex-wrap:nowrap; white-space:nowrap;
     padding:0 6vw;
-    font-size:clamp(52px, 17vw, 170px);
+    font-size:clamp(32px, ${fontVw}vw, 170px);
     font-weight:700; letter-spacing:.08em;
     color:#fff;
     text-align:center;
@@ -116,9 +131,10 @@ async function main() {
   const resumen = []
   for (const est of ESTACIONES) {
     const desordenada = desordenar(est.palabra)
+    verificarLetras(est.palabra, desordenada)
     const archivoHtml = join(dirPaginas, `${est.codigo}.html`)
-    writeFileSync(archivoHtml, paginaHtml(est, desordenada))
-    console.log(`✓ ${est.codigo}.html  (${est.palabra} → ${desordenada})`)
+    writeFileSync(archivoHtml, paginaHtml(est, desordenada, fontVwPara(desordenada)))
+    console.log(`✓ ${est.codigo}.html  (${est.palabra} → ${desordenada})  · fontVw=${fontVwPara(desordenada)}`)
 
     const payload = `${BASE_URL}/nivel2/${est.codigo}.html#${desordenada}`
     await generarQR(payload, join(dirQr, est.codigo))

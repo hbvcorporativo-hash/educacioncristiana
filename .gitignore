@@ -11,3 +11,4 @@ public/nivel2/qr/sector-delta.png
 public/nivel2/qr/sector-delta.svg
 public/nivel2/qr/sector-gamma.png
 public/nivel2/qr/sector-gamma.svg
+scripts/generar-nivel2.mjs

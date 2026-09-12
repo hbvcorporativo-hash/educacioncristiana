@@ -10,7 +10,7 @@ from pathlib import Path
 import edge_tts
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / 'lib' / 'data.js'
+DATA = ROOT / 'lib' / 'mensajes.js'
 OUTPUT = ROOT / 'public' / 'voces'
 VOICES = {
     'leo': ('es-US-AlonsoNeural', '+5%', '+0Hz'),
@@ -36,6 +36,7 @@ def mensajes():
 def texto_para(agente, texto):
     if agente == 'sara':
         return texto.replace('Leo', 'Sara').replace('aliado', 'aliada')
+    texto = texto.replace('hackear', 'jaquear')
     return texto
 
 
