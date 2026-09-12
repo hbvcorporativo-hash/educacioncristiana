@@ -13,7 +13,8 @@
 - This is a Next.js 15 App Router application configured for static export in `next.config.mjs`.
 - `app/page.jsx` is the application entrypoint and mounts `components/game/Game.jsx`.
 - `Game.jsx` is client-only and owns the state machine for `intro`, `pAvatar`, `pMapa`, `pNivel`, and `final`.
-- Editable game content, level definitions, codes, and voice text live in `lib/data.js`.
+- All editable game content — voices, level definitions, codes, and every UI string (texts, modals, canvas, ayuda) — lives in `lib/mensajes.js` as a serializable dictionary (`MENSAJES`), with access helpers `t()`, `aviso()`, and the `Rich` renderer for `**bold**` / `` `code` `` / `\n` tokens.
+- `lib/data.js` holds only logic and constants (`SEGUNDOS`, `PTS`, `BONO`, `ESTILOS`, `norm`, `rnd`, `urlAvatar`) and re-exports `VOCES`/`NIVELES` from `lib/mensajes.js` for compatibility.
 - `app/styles/globals.scss` is the main Sass entry point importing 15 partials (`_variables`, `_base`, `_buttons`, etc.). Preserve `.pantalla` and `.pantalla.on` in `_screens.scss`, which control screen visibility.
 
 ## Browser-only behavior

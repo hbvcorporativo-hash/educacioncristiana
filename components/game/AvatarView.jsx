@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { urlAvatar, NIVELES } from '@/lib/data'
+import { t } from '@/lib/mensajes'
 
 /* Avatar con disco y piezas de armadura orbitando */
 export default function AvatarView({ av, niveles = NIVELES, nueva = null, xl = false, md = false, sm = false }) {
@@ -23,7 +24,7 @@ export default function AvatarView({ av, niveles = NIVELES, nueva = null, xl = f
           // eslint-disable-next-line @next/next/no-img-element
           <img
              src={avatarUrl}
-            alt="avatar"
+            alt={t('ui.jugador.avatarAlt')}
             onError={() => setImgOk(false)}
           />
         )}

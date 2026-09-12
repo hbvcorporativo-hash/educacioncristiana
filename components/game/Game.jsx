@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { VOCES, NIVELES, SEGUNDOS, PTS, BONO, N, ESTILOS, norm, rnd, urlAvatar } from '@/lib/data'
+import { t, aviso, Rich, paraAgente, MENSAJES } from '@/lib/mensajes'
 import sfx from '@/lib/sfx'
 import * as musica from '@/lib/musica'
 import * as voz from '@/lib/voz'
@@ -17,7 +18,7 @@ export default function Game() {
   /* ===== STATE ===== */
   const [pantalla, setPantalla] = useState('intro')
   const [nv, setNv] = useState(() => NIVELES.map(x => ({ ...x, hecho: false, foto: null })))
-  const [av, setAv] = useState({ estilo: 'adventurer', seed: 'inicio', nombre: 'Operador' })
+  const [av, setAv] = useState({ estilo: 'adventurer', seed: 'inicio', nombre: t('ui.jugador.nombre') })
   const [seeds, setSeeds] = useState([])
   const [puntos, setPuntos] = useState(0)
   const [actual, setActual] = useState(null)
@@ -25,9 +26,9 @@ export default function Game() {
   const [matrixTipo, setMatrixTipo] = useState(null)
   const matrixTimer = useRef(null)
 
-  const [globo, setGlobo] = useState('…')
+  const [globo, setGlobo] = useState(t('ui.jugador.globo'))
   const [leoHabla, setLeoHabla] = useState(false)
-  const [aviso, setAviso] = useState({ t: '', k: '' })
+  const [avisoEst, setAvisoEst] = useState({ t: '', k: '' })
   const [claveVal, setClaveVal] = useState('')
   const [claveMal, setClaveMal] = useState(false)
   const [muteSfx, setMuteSfx] = useState(false)
@@ -39,10 +40,14 @@ export default function Game() {
   const [revelar, setRevelar] = useState(null) // {eti,ico,nom,ver,dec,pts}
   const [capaMusica, setCapaMusica] = useState(false)
   const [capaGuion, setCapaGuion] = useState(false)
-  const [btnPlayTxt, setBtnPlayTxt] = useState('▶ REPRODUCIR CANCIÓN')
+  const [btnPlayTxt, setBtnPlayTxt] = useState(t('ui.audio.play'))
   const [volMus, setVolMus] = useState(100)
   const [volVoz, setVolVoz] = useState(85)
   const [agente, setAgente] = useState('principal')
+
+  const cfgAgente = (MENSAJES.ui.modales.guion.agentes.find(a => a.id === agente) || MENSAJES.ui.modales.guion.agentes[0])
+  const agenteNom = cfgAgente.corto
+  const agenteDir = cfgAgente.dir
 
   const inputFoto = useRef(null)
   const videoFoto = useRef(null)
@@ -69,10 +74,10 @@ export default function Game() {
     if (!x) return
     if (x.hecho) {
       voz.pararVoz()
-      setGlobo('Sector ya descontaminado. Pueden revisar su evidencia o volver al mapa.')
+      setGlobo(t('ui.jugador.sectorListo'))
       return
     }
-    setGlobo(VOCES[x.voz] || '…')
+    setGlobo(VOCES[x.voz] || t('ui.jugador.globo'))
     voz.hablar(x.voz)
   }, [pantalla, actual])
 
@@ -97,7 +102,7 @@ export default function Game() {
         restaRef.current = r
         setRelojResta(r)
         sfx.fin()
-        avisar('se acabó el tiempo — pueden seguir, sin bono', 'tip')
+        avisar(aviso('ui.avisos.tiempo'))
         pararReloj()
         return
       }
@@ -110,7 +115,7 @@ export default function Game() {
   }
 
   /* ===== AVISO ===== */
-  function avisar(t, k) { setAviso({ t, k: k || '' }) }
+  function avisar(a) { setAvisoEst(a) }
 
   /* ===== NAVEGACIÓN ===== */
   function verPantalla(id) {
@@ -137,7 +142,7 @@ export default function Game() {
     setActual(i)
     setClaveVal('')
     setClaveMal(false)
-    avisar('', '')
+    avisar({ t: '', k: '' })
     verPantalla('pNivel')
     if (!x.hecho) arrancarReloj()
     else {
@@ -194,7 +199,9 @@ export default function Game() {
         }
       })
     } catch (error) {
-      setCamaraError(error.name === 'NotAllowedError' ? 'Permiso de cámara denegado. Puedes seleccionar una imagen.' : 'No se pudo abrir la cámara. Puedes seleccionar una imagen.')
+      setCamaraError(error.name === 'NotAllowedError'
+        ? aviso('ui.avisos.camaraDenegada').t
+        : aviso('ui.avisos.camaraError').t)
       inputFoto.current?.click()
     }
   }
@@ -211,20 +218,20 @@ export default function Game() {
     const foto = canvas.toDataURL('image/jpeg', .72)
     detenerCamara()
     setNv(prev => prev.map((y, j) => j === actual ? { ...y, foto } : y))
-    avisar('✔ evidencia guardada', 'ok')
+    avisar(aviso('ui.avisos.ok'))
     sfx.foto(); flash()
   }
 
   function onFoto(ev) {
     const f = ev.target.files && ev.target.files[0]
     if (!f || actual === null) return
-    avisar('procesando imagen...', 'tip')
+    avisar(aviso('ui.avisos.procesando'))
     miniatura(f, u => {
       if (u) {
         setNv(prev => prev.map((y, j) => j === actual ? { ...y, foto: u } : y))
-        avisar('✔ evidencia guardada', 'ok')
+        avisar(aviso('ui.avisos.ok'))
         sfx.foto(); flash()
-      } else avisar('no se pudo leer la imagen', 'mal')
+      } else avisar(aviso('ui.avisos.sinImagen'))
     })
     ev.target.value = ''
   }
@@ -232,10 +239,10 @@ export default function Game() {
   function hackear() {
     const x = nv[actual]
     const v = claveVal
-    if (!v.trim()) { avisar('introduce el código', 'mal'); return }
-    if (!x.foto) { avisar('toma la foto de evidencia antes de validar', 'mal'); return }
+    if (!v.trim()) { avisar(aviso('ui.avisos.claveVacia')); return }
+    if (!x.foto) { avisar(aviso('ui.avisos.fotoFaltante')); return }
     if (norm(v) !== norm(x.clave)) {
-      avisar('✖ ACCESS DENIED — código incorrecto', 'mal')
+      avisar(aviso('ui.avisos.denied'))
       sfx.mal()
       setClaveMal(true)
       setTimeout(() => setClaveMal(false), 450)
@@ -252,11 +259,11 @@ export default function Game() {
     ejecutarConHackeo('hackeo', () => {
       setPuntos(p => p + gan)
       setRevelar({
-        eti: 'ADN ' + Math.round(nHechos / N * 100) + '% restaurado',
+        eti: t('ui.revelar.eti', { pct: Math.round(nHechos / N * 100) }),
         ico: x.ico, nom: x.piezaNom,
-        ver: '📖 ' + x.verso,
-        dec: '"' + x.decl + '"',
-        pts: '+' + gan + ' pts' + (bono > 0 ? '  ⚡ bono +' + bono : '')
+        ver: t('ui.revelar.ver', { ver: x.verso }),
+        dec: t('ui.revelar.dec', { dec: x.decl }),
+        pts: t('ui.revelar.puntos', { pts: gan }) + (bono > 0 ? t('ui.revelar.bono', { bono }) : '')
       })
       setNv(nivelesSiguientes)
       setNuevaPieza(x.pieza)
@@ -266,7 +273,7 @@ export default function Game() {
   function pista() {
     sfx.tap()
     voz.hablar(nv[actual].pista)
-    avisar(`💡 escucha la pista de ${agente === 'mujer' ? 'Sara' : 'Leo'}`, 'tip')
+    avisar(aviso('ui.avisos.pista', { agente: agenteNom }))
   }
 
   function cerrarRevelar() {
@@ -277,7 +284,7 @@ export default function Game() {
     setTimeout(() => {
       const a = document.getElementById('avatarMini')
       if (a) { const r = a.getBoundingClientRect(); chispas(r.left + r.width / 2, r.top + r.height / 2) }
-      bandera('◆ ' + nivel.piezaNom.toUpperCase() + ' EQUIPADO')
+      bandera(t('ui.bandera.equipado', { pieza: nivel.piezaNom.toUpperCase() }))
       if (completados.every(x => x.hecho)) setTimeout(ganar, 1800)
     }, 60)
   }
@@ -299,15 +306,13 @@ export default function Game() {
       grd.addColorStop(0, '#12304F'); grd.addColorStop(1, '#060B14')
       g.fillStyle = grd; g.fillRect(0, 0, W, H)
       g.strokeStyle = '#FFC531'; g.lineWidth = 4; g.strokeRect(18, 18, W - 36, H - 36)
-      g.fillStyle = '#22D3EE'; g.font = '600 22px monospace'; g.fillText('TARJETA DE IDENTIDAD', 56, 92)
-      g.fillStyle = '#fff'; g.font = '700 46px sans-serif'; g.fillText((av.nombre || 'Operador').slice(0, 18), 56, 148)
-      const campos = [
-        ['IDENTIDAD', 'Hijo/a de Dios', '#34E39B'],
-        ['MI PODER', document.getElementById('tiPoder').value || '—', '#DCE9F5'],
-        ['VERDAD QUE NECESITO RECORDAR', document.getElementById('tiVerdad').value || '—', '#DCE9F5'],
-        ['MI PROPOSITO', document.getElementById('tiProp').value || '—', '#DCE9F5'],
-        ['VERSICULO DESBLOQUEADO', 'Juan 1:12', '#FFC531']
-      ]
+      g.fillStyle = '#22D3EE'; g.font = '600 22px monospace'; g.fillText(MENSAJES.ui.tarjeta.titulo, 56, 92)
+      g.fillStyle = '#fff'; g.font = '700 46px sans-serif'; g.fillText((av.nombre || t('ui.jugador.nombre')).slice(0, 18), 56, 148)
+      const campos = MENSAJES.ui.tarjeta.campos.map(f => [
+        f.lab,
+        f.input ? (document.getElementById(f.input).value || MENSAJES.ui.tarjeta.vacio) : f.val,
+        f.color
+      ])
       let y = 640
       campos.forEach(f => {
         g.fillStyle = '#7C93AE'; g.font = '400 18px monospace'; g.fillText(f[0], 56, y)
@@ -315,7 +320,7 @@ export default function Game() {
         y += 92
       })
       g.fillStyle = '#7C93AE'; g.font = '400 17px monospace'
-      g.fillText('ADN restaurado 100% · armadura completa · Efesios 6', 56, H - 64)
+      g.fillText(MENSAJES.ui.tarjeta.footer, 56, H - 64)
       dibujarInsignias(g, W)
       fetch(urlAvatar(av.seed, av.estilo, 300)).then(r => r.text()).then(t => {
         const im = new Image()
@@ -330,7 +335,7 @@ export default function Game() {
         im.onerror = () => bajar(c)
         im.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(t)))
       }).catch(() => bajar(c))
-    } catch (q) { bandera('Toma una captura de pantalla') }
+    } catch (q) { bandera(t('ui.bandera.captura')) }
   }
 
   function dibujarInsignias(g, W) {
@@ -349,16 +354,16 @@ export default function Game() {
   function bajar(c) {
     try {
       const a = document.createElement('a')
-      a.download = 'mi-identidad-adn.png'
+      a.download = MENSAJES.ui.tarjeta.archivo
       a.href = c.toDataURL('image/png')
       a.click()
-    } catch (q) { bandera('Toma una captura de pantalla') }
+    } catch (q) { bandera(t('ui.bandera.captura')) }
   }
 
   function otraVez() {
     pararReloj()
     musica.parar()
-    setBtnPlayTxt('▶ REPRODUCIR CANCIÓN')
+    setBtnPlayTxt(t('ui.audio.play'))
     setNv(NIVELES.map(x => ({ ...x, hecho: false, foto: null })))
     setPuntos(0)
     setActual(null)
@@ -379,8 +384,8 @@ export default function Game() {
   }
   function togglePlay() {
     sfx.tap()
-    if (musica.sonando()) { musica.parar(); setBtnPlayTxt('▶ REPRODUCIR CANCIÓN') }
-    else { musica.iniciar(); setBtnPlayTxt('⏸ PAUSAR CANCIÓN') }
+    if (musica.sonando()) { musica.parar(); setBtnPlayTxt(t('ui.audio.play')) }
+    else { musica.iniciar(); setBtnPlayTxt(t('ui.audio.pausa')) }
   }
 
   /* ===== DERIVADOS RELOJ ===== */
@@ -401,25 +406,25 @@ export default function Game() {
         <div className="scroll" ref={el => (scrollRefs.current['intro'] = el)}><div className="col">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <ADN xl fraccion={fraccion} />
-          <div className="alerta mono">● AMENAZA DETECTADA</div>
-          <h1 className="tit-hack">ANTIVIRUS ADN</h1>
-          <div className="tit-sub">Hackea el virus · recupera tu identidad</div>
+          <div className="alerta mono">{t('ui.intro.alerta')}</div>
+          <h1 className="tit-hack">{t('ui.intro.titulo')}</h1>
+          <div className="tit-sub">{t('ui.intro.sub')}</div>
           <div className="brief">
-            Hoy sus identidades están siendo atacadas por un virus. El virus se llama <b>COMPARACIÓN</b>. Se mete por las redes, los comentarios, el colegio, los amigos y hasta por nuestros propios pensamientos.<br /><br />
-            Su misión: superar <b>6 niveles</b>, detectar las mentiras y recuperar el código de su verdadera identidad.
+            <Rich s={t('ui.intro.brief.0')} /><br /><br />
+            <Rich s={t('ui.intro.brief.1')} />
           </div>
           <div className="terminal mono">
-            {'>'} escaneando ADN...<br />
-            {'>'} <b>archivo:</b> identidad.adn<br />
-            {'>'} <b>estado:</b> <span style={{ color: '#FF3B5C' }}>CORRUPTO (0% restaurado)</span><br />
-            {'>'} <b>armadura:</b> 0/6 piezas<br />
-            {'>'} esperando operador...
+            <Rich s={t('ui.intro.terminal.0')} /><br />
+            <Rich s={t('ui.intro.terminal.1')} /><br />
+            <Rich s={t('ui.intro.terminal.2')} /><span style={{ color: '#FF3B5C' }}>{t('ui.intro.terminalCorrupto')}</span><br />
+            <Rich s={t('ui.intro.terminal.3')} /><br />
+            <Rich s={t('ui.intro.terminal.4')} />
           </div>
           <button
             className="bt cian"
             onClick={() => { sfx.init(); sfx.tap(); ejecutarConHackeo('inicio', () => verPantalla('pAvatar')) }}
-          >INICIAR MISIÓN</button>
-          <div style={{ fontSize: 12, color: 'var(--gris)' }}>Toca para activar el audio</div>
+          >{t('ui.intro.btnIniciar')}</button>
+          <div style={{ fontSize: 12, color: 'var(--gris)' }}>{t('ui.intro.audioHint')}</div>
         </div></div>
       </div>
 
@@ -427,22 +432,22 @@ export default function Game() {
       <div className={'pantalla' + (pantalla === 'pAvatar' ? ' on' : '')} id="pAvatar">
         <div className="scroll" ref={el => (scrollRefs.current['pAvatar'] = el)}><div className="col">
           <div style={{ alignSelf: 'center' }}><ADN md fraccion={fraccion} /></div>
-          <div className="tit-sub">Paso 1 de 2</div>
-          <h2 style={{ fontSize: 24 }}>Crea tu operador</h2>
+          <div className="tit-sub">{t('ui.avatar.paso')}</div>
+          <h2 style={{ fontSize: 24 }}>{t('ui.avatar.titulo')}</h2>
           <p style={{ margin: 0, fontSize: 14, color: 'var(--gris)' }}>
-            Este eres tú dentro del sistema. Con cada nivel vas a equiparlo con una pieza de la armadura de Efesios 6.
+            {t('ui.avatar.desc')}
           </p>
           <div className="av-caja"><AvatarView av={av} niveles={nv} xl /></div>
           <input
             id="nombreAv"
             type="text"
-            placeholder="Nombre de tu operador"
+            placeholder={t('ui.avatar.nombrePlaceholder')}
             maxLength={18}
             autoComplete="off"
             value={av.nombre}
             onChange={e => setAv(a => ({ ...a, nombre: e.target.value }))}
           />
-          <div className="op-grupo"><div className="op-tit">Estilo</div>
+          <div className="op-grupo"><div className="op-tit">{t('ui.avatar.estilo')}</div>
             <div className="estilos" id="estilos">
               {ESTILOS.map(e => (
                 <button
@@ -455,7 +460,7 @@ export default function Game() {
               ))}
             </div>
           </div>
-          <div className="op-grupo"><div className="op-tit">Elige tu personaje</div>
+          <div className="op-grupo"><div className="op-tit">{t('ui.avatar.personaje')}</div>
             <div className="galeria" id="galeria">
               {seeds.map(sd => (
                 <button
@@ -472,12 +477,12 @@ export default function Game() {
             </div>
             <button className="bt ghost" id="btnOtros" style={{ marginTop: 10 }}
               onClick={() => { sfx.tap(); nuevasSeeds() }}
-            >🎲 VER OTROS</button>
+            >{t('ui.avatar.verOtros')}</button>
           </div>
           <button
             className="bt verde" id="btnAvatarListo"
             onClick={() => {
-              const nombre = (av.nombre || '').trim() || 'Operador'
+              const nombre = (av.nombre || '').trim() || t('ui.jugador.nombre')
               setAv(a => ({ ...a, nombre }))
                sfx.tap()
                musica.iniciar()
@@ -486,7 +491,7 @@ export default function Game() {
                  verPantalla('pMapa')
                })
             }}
-          >ENTRAR AL SISTEMA</button>
+          >{t('ui.avatar.entrar')}</button>
         </div></div>
       </div>
 
@@ -500,8 +505,8 @@ export default function Game() {
           <div className="estado">
             <div id="avatarMini"><AvatarView av={av} niveles={nv} nueva={nuevaPieza} md /></div>
             <div className="est-in">
-              <div className="est-nom">{av.nombre || 'Operador'}</div>
-              <div className="est-sub">identidad.adn · {hechos}/{N} restaurado</div>
+              <div className="est-nom">{av.nombre || t('ui.jugador.nombre')}</div>
+              <div className="est-sub">{t('ui.mapa.subRestaurado', { hechos, N })}</div>
               <div className="barra-inf"><div className="barra-fill" style={{ width: (hechos / N * 100) + '%' }}></div></div>
               <div className="armadura" id="armadura">
                 {nv.map(x => (
@@ -510,13 +515,13 @@ export default function Game() {
               </div>
             </div>
           </div>
-          <div className="tit-sub">Niveles de descontaminación</div>
+          <div className="tit-sub">{t('ui.mapa.tituloNiveles')}</div>
           <div id="listaNiveles" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {nv.map((x, i) => {
               const libre = i === 0 || nv[i - 1].hecho
               const est = x.hecho ? 'hecho' : (libre ? 'libre' : 'bloq')
               const cara = x.hecho ? '✓' : (libre ? x.n : '🔒')
-              const sub = x.hecho ? 'Sector limpio' : (libre ? 'Disponible · toquen para entrar' : 'Bloqueado')
+              const sub = x.hecho ? t('ui.mapa.sectorLimpio') : (libre ? t('ui.mapa.disponible') : t('ui.mapa.bloqueado'))
               return (
                 <button
                   key={x.pieza}
@@ -532,7 +537,7 @@ export default function Game() {
                     )}
                   </span>
                   <span className="nv-in">
-                    <span className="nv-eti mono">Nivel {x.n}</span>
+                    <span className="nv-eti mono">{t('ui.mapa.nivel', { n: x.n })}</span>
                     <span className="nv-tit">{x.titulo}</span>
                     <span className="nv-sub">{sub}</span>
                     <span className="nv-arm mono">{x.ico} {x.piezaNom}</span>
@@ -545,14 +550,14 @@ export default function Game() {
             <div className="final-card listo" id="finalCard"
               onClick={() => { sfx.tap(); ganar() }}>
               <div className="fc-ico">🔓</div>
-              <div className="fc-tit">¡Identidad desbloqueada!</div>
-              <div className="fc-sub">Toquen para ver su tarjeta</div>
+              <div className="fc-tit">{t('ui.mapa.finalAbierto.titulo')}</div>
+              <div className="fc-sub">{t('ui.mapa.finalAbierto.sub')}</div>
             </div>
           ) : (
             <div className="final-card" id="finalCard">
               <div className="fc-ico">🔒</div>
-              <div className="fc-tit">Identidad bloqueada</div>
-              <div className="fc-sub">Supera los 6 niveles para desbloquearla</div>
+              <div className="fc-tit">{t('ui.mapa.finalCerrado.titulo')}</div>
+              <div className="fc-sub">{t('ui.mapa.finalCerrado.sub')}</div>
             </div>
           )}
         </div></div>
@@ -569,10 +574,10 @@ export default function Game() {
             <div className="top">
               <button className="volver" id="btnVolver"
                 onClick={() => { sfx.tap(); pararReloj(); voz.pararVoz(); verPantalla('pMapa') }}
-              >←</button>
-              <span className="top-tit mono">NIVEL {nivelX.n} / {N}</span>
+              >{t('ui.nivel.volver')}</button>
+              <span className="top-tit mono">{t('ui.nivel.header', { n: nivelX.n, N })}</span>
             </div>
-            {!nivelX.hecho && <div className="denied mono">🔴 ACCESS DENIED</div>}
+            {!nivelX.hecho && <div className="denied mono">{t('ui.nivel.denied')}</div>}
             <h2 style={{ fontSize: 23 }}>{nivelX.titulo}</h2>
             {!nivelX.hecho && (
               <div className={relojCls}>
@@ -581,7 +586,7 @@ export default function Game() {
               </div>
             )}
             <div className="caja" style={{ borderLeft: '3px solid var(--virus)' }}>
-              <div className="eti">Informe del virus</div>
+              <div className="eti">{t('ui.nivel.informe')}</div>
               <p>{nivelX.brief}</p>
             </div>
             <div className={'leo' + (leoHabla ? ' habla' : '')}>
@@ -589,11 +594,11 @@ export default function Game() {
               <div className="globo">{globo}</div>
             </div>
             <div className="fila">
-              <button className="mini" onClick={() => { sfx.tap(); voz.repetir() }}>▶ Repetir</button>
-              {!nivelX.hecho && <button className="mini" onClick={pista}>💡 Pista</button>}
+              <button className="mini" onClick={() => { sfx.tap(); voz.repetir() }}>{t('ui.nivel.repetir')}</button>
+              {!nivelX.hecho && <button className="mini" onClick={pista}>{t('ui.nivel.pista')}</button>}
             </div>
             <div className="caja">
-              <div className="eti">Reto en físico</div>
+              <div className="eti">{t('ui.nivel.reto')}</div>
               <p>{nivelX.reto}</p>
               <div className="tarjetas">
                 {(nivelX.tarjetas || []).map((t, i) => (
@@ -609,28 +614,28 @@ export default function Game() {
               </div>
             </div>
             <div className="caja">
-              <div className="eti">📸 Evidencia del equipo (obligatoria)</div>
+              <div className="eti">{t('ui.nivel.evidencia')}</div>
               <div className={'foto-caja' + (nivelX.foto ? ' foto-ok' : '')} id="fotoCaja">
                 {nivelX.foto
                   ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={nivelX.foto} alt="evidencia" />
+                    <img src={nivelX.foto} alt={t('ui.nivel.evidenciaAlt')} />
                   )
-                   : <div className="foto-vacia">Tomen la foto del reto terminado (obligatoria)</div>}
+                   : <div className="foto-vacia">{t('ui.nivel.fotoVacia')}</div>}
               </div>
               {!nivelX.hecho && (
                 <button className="bt ghost" id="btnFoto" onClick={abrirCamara}>
-                  {nivelX.foto ? '🔄 CAMBIAR FOTO' : '📸 TOMAR FOTO'}
+                  {nivelX.foto ? t('ui.nivel.cambiarFoto') : t('ui.nivel.tomarFoto')}
                 </button>
               )}
             </div>
             {!nivelX.hecho && (
               <div id="zonaClave">
-                <div className="eti" style={{ textAlign: 'center' }}>Introduce el código de acceso</div>
+                <div className="eti" style={{ textAlign: 'center' }}>{t('ui.nivel.codigo')}</div>
                 <input
                   id="clave"
                   type="text"
-                  placeholder="Escribe el código…"
+                  placeholder={t('ui.nivel.codigoPlaceholder')}
                   autoComplete="off"
                   spellCheck="false"
                   maxLength={40}
@@ -641,10 +646,10 @@ export default function Game() {
                 />
               </div>
             )}
-            {nivelX.hecho && <div className="hecho-caja" id="cajaHecho">✔ NIVEL DESCONTAMINADO</div>}
-            <div className={'aviso mono ' + aviso.k} id="aviso">{aviso.t}</div>
+            {nivelX.hecho && <div className="hecho-caja" id="cajaHecho">{t('ui.nivel.descontaminado')}</div>}
+            <div className={'aviso mono ' + avisoEst.k} id="aviso">{avisoEst.t}</div>
             {!nivelX.hecho && (
-              <button className="bt verde" id="btnHackear" onClick={hackear}>HACKEAR EL VIRUS</button>
+              <button className="bt verde" id="btnHackear" onClick={hackear}>{t('ui.nivel.hackear')}</button>
             )}
           </div></div>
         )}
@@ -653,29 +658,29 @@ export default function Game() {
       {/* ===== FINAL ===== */}
       <div className={'pantalla' + (pantalla === 'final' ? ' on' : '')} id="final">
         <div className="scroll" ref={el => (scrollRefs.current['final'] = el)}><div className="col">
-          <div className="alerta mono" style={{ color: 'var(--verde)', borderColor: 'var(--verde)', background: 'rgba(52,227,155,.1)' }}>● VIRUS ELIMINADO</div>
-          <h2 style={{ fontSize: 26 }}>Identidad restaurada</h2>
+          <div className="alerta mono" style={{ color: 'var(--verde)', borderColor: 'var(--verde)', background: 'rgba(52,227,155,.1)' }}>{t('ui.final.alerta')}</div>
+          <h2 style={{ fontSize: 26 }}>{t('ui.final.titulo')}</h2>
           <ADN xl fraccion={fraccion} />
           <JesusBox />
           <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6, color: '#C9DCEE' }}>
-            El virus mentía. Esta es la verdad: no tienes que compararte con nadie, porque Él ya te ha diseñado unico, y no hay nadie igual a ti, te ha escogido desde antes que nacieras y te hizo obra MAESTRA.
+            {t('ui.final.parrafo')}
           </p>
           <div className="tarjeta-id" id="tarjetaId">
             <div className="ti-top">
               <AvatarView av={av} niveles={nv} sm />
               <div>
-                <div className="ti-tit mono">Tarjeta de identidad</div>
-                <div className="ti-nom">{av.nombre || 'Operador'}</div>
+                <div className="ti-tit mono">{t('ui.final.tarjeta')}</div>
+                <div className="ti-nom">{av.nombre || t('ui.jugador.nombre')}</div>
               </div>
             </div>
-            <div className="ti-campo"><span className="ti-lab mono">❤️ IDENTIDAD</span><div className="ti-fijo">Hijo/a de Dios</div></div>
-            <div className="ti-campo"><span className="ti-lab mono">⚡ MI PODER</span><input className="ti-in" id="tiPoder" placeholder="Escríbelo…" maxLength={42} /></div>
-            <div className="ti-campo"><span className="ti-lab mono">🛡️ VERDAD QUE NECESITO RECORDAR</span><input className="ti-in" id="tiVerdad" placeholder="Escríbelo…" maxLength={42} /></div>
-            <div className="ti-campo"><span className="ti-lab mono">🎯 MI PROPÓSITO</span><input className="ti-in" id="tiProp" placeholder="Escríbelo…" maxLength={42} /></div>
-            <div className="ti-campo" style={{ marginBottom: 0 }}><span className="ti-lab mono">🔓 VERSÍCULO DESBLOQUEADO</span><div className="ti-ver">Juan 1:12</div></div>
+            <div className="ti-campo"><span className="ti-lab mono">{t('ui.final.identidadLab')}</span><div className="ti-fijo">{t('ui.final.identidad')}</div></div>
+            <div className="ti-campo"><span className="ti-lab mono">{t('ui.final.poder')}</span><input className="ti-in" id="tiPoder" placeholder={t('ui.final.escribe')} maxLength={42} /></div>
+            <div className="ti-campo"><span className="ti-lab mono">{t('ui.final.verdad')}</span><input className="ti-in" id="tiVerdad" placeholder={t('ui.final.escribe')} maxLength={42} /></div>
+            <div className="ti-campo"><span className="ti-lab mono">{t('ui.final.proposito')}</span><input className="ti-in" id="tiProp" placeholder={t('ui.final.escribe')} maxLength={42} /></div>
+            <div className="ti-campo" style={{ marginBottom: 0 }}><span className="ti-lab mono">{t('ui.final.versoLab')}</span><div className="ti-ver">{t('ui.final.verso')}</div></div>
           </div>
-          <button className="bt oro" id="btnDescargar" onClick={() => { sfx.tap(); descargarTarjeta() }}>⬇ DESCARGAR MI TARJETA</button>
-          <button className="bt ghost" id="btnOtra" onClick={otraVez}>↻ NUEVA MISIÓN</button>
+          <button className="bt oro" id="btnDescargar" onClick={() => { sfx.tap(); descargarTarjeta() }}>{t('ui.final.descargar')}</button>
+          <button className="bt ghost" id="btnOtra" onClick={otraVez}>{t('ui.final.nuevaMision')}</button>
         </div></div>
       </div>
 
@@ -683,31 +688,31 @@ export default function Game() {
       {capaMusica && (
         <div className="capa on" id="capaMusica" onClick={ev => { if (ev.target.id === 'capaMusica') setCapaMusica(false) }}>
           <div className="hoja">
-            <div className="hoja-top"><h3>🎵 Música NXTWAVE</h3>
+            <div className="hoja-top"><h3>{t('ui.modales.musica.titulo')}</h3>
               <button className="hud-ico" onClick={() => setCapaMusica(false)}>✕</button></div>
             <div className="hoja-int">
-              Pon las canciones de NXTWAVE en una carpeta <code>canciones/</code>, con estos nombres. Sonarán de fondo en cada nivel. Si un archivo no existe, ese nivel va sin música.
+              <Rich s={t('ui.modales.musica.intro')} />
             </div>
             <div style={{ padding: '13px 17px 0' }}>
               <button className="bt cian" id="btnPlay" onClick={togglePlay}>{btnPlayTxt}</button>
             </div>
             <div className="vol">
-              <span style={{ fontSize: 13 }}>Música MP3 (máx 7%)</span>
-              <input type="range" min="0" max="100" value={volMus} aria-label="Volumen de música MP3"
+              <span style={{ fontSize: 13 }}>{t('ui.modales.musica.volumen')}</span>
+              <input type="range" min="0" max="100" value={volMus} aria-label={t('ui.modales.musica.volumenAria')}
                 onChange={e => { const v = +e.target.value; setVolMus(v); musica.volumen(v / 100 * 0.07) }} />
               <span className="mono" style={{ fontSize: 12, width: 34, textAlign: 'right' }}>{volMus}</span>
             </div>
             <div className="hoja-cuerpo" id="cuerpoMusica">
               <div className="linea">
-                <div className="f mono">canciones/revolution.mp3</div>
-                <div className="t">Canción principal — suena continua durante todo el juego.<br /><b>We Are The Revolution</b> · Nxtwave (WATR)</div>
+                <div className="f mono">{t('ui.modales.musica.linea1.f')}</div>
+                <div className="t"><Rich s={t('ui.modales.musica.linea1.t')} /></div>
               </div>
               <div className="linea">
-                <div className="f mono">revolution.mp3</div>
-                <div className="t">También funciona si el archivo queda suelto, al lado de la app.</div>
+                <div className="f mono">{t('ui.modales.musica.linea2.f')}</div>
+                <div className="t">{t('ui.modales.musica.linea2.t')}</div>
               </div>
               <div className="linea">
-                <div className="t" style={{ color: 'var(--gris)' }}>La música baja sola cuando Leo habla y vuelve a subir al terminar.</div>
+                <div className="t" style={{ color: 'var(--gris)' }}>{t('ui.modales.musica.ducking')}</div>
               </div>
             </div>
           </div>
@@ -718,30 +723,30 @@ export default function Game() {
       {capaGuion && (
         <div className="capa on" id="capaGuion" onClick={ev => { if (ev.target.id === 'capaGuion') setCapaGuion(false) }}>
           <div className="hoja">
-            <div className="hoja-top"><h3>🎙 Voces de {agente === 'mujer' ? 'Sara' : 'Leo'}</h3>
+            <div className="hoja-top"><h3>{t('ui.modales.guion.titulo', { agente: agenteNom })}</h3>
               <button className="hud-ico" onClick={() => setCapaGuion(false)}>✕</button></div>
             <div className="hoja-int">
-              Cada línea requiere un MP3 estéreo colombiano en <code>public/voces/{agente === 'mujer' ? 'sara' : 'leo'}/</code>. Leo usa la misma colección para voz natural y de sistema.
+              <Rich s={t('ui.modales.guion.intro', { dir: agenteDir })} />
             </div>
             <div className="agent-picker">
-              <div className="op-tit">Agente de voz</div>
+              <div className="op-tit">{t('ui.modales.guion.pickerTitulo')}</div>
               <div className="fila">
-                {[['principal', 'Leo · voz natural'], ['sistema', 'Leo · voz del sistema'], ['mujer', 'Sara · voz femenina']].map(([id, nombre]) => (
-                  <button key={id} className="mini" data-sel={agente === id ? '1' : '0'} onClick={() => { setAgente(id); voz.seleccionarAgente(id); sfx.tap() }}>{nombre}</button>
+                {MENSAJES.ui.modales.guion.agentes.map(a => (
+                  <button key={a.id} className="mini" data-sel={agente === a.id ? '1' : '0'} onClick={() => { setAgente(a.id); voz.seleccionarAgente(a.id); sfx.tap() }}>{a.nombre}</button>
                 ))}
               </div>
             </div>
             <div className="vol">
-              <span style={{ fontSize: 13 }}>Voces de {agente === 'mujer' ? 'Sara' : 'Leo'}</span>
-              <input type="range" min="0" max="100" value={volVoz} aria-label={`Volumen de las voces de ${agente === 'mujer' ? 'Sara' : 'Leo'}`}
+              <span style={{ fontSize: 13 }}>{t('ui.modales.guion.volumen', { agente: agenteNom })}</span>
+              <input type="range" min="0" max="100" value={volVoz} aria-label={t('ui.modales.guion.volumenAria', { agente: agenteNom })}
                 onChange={e => { const v = +e.target.value; setVolVoz(v); voz.volumenDeVoz(v / 100) }} />
               <span className="mono" style={{ fontSize: 12, width: 34, textAlign: 'right' }}>{volVoz}</span>
             </div>
             <div className="hoja-cuerpo" id="cuerpoGuion">
               {Object.entries(VOCES).map(([k, v]) => (
                 <div className="linea" key={k}>
-                  <div className="f mono">voces/{agente === 'mujer' ? 'sara' : 'leo'}/{k}.mp3</div>
-                  <div className="t">&quot;{agente === 'mujer' ? v.replace(/Leo/g, 'Sara').replace(/aliado/g, 'aliada') : v}&quot;</div>
+                  <div className="f mono">{t('ui.modales.guion.lineaArchivo', { dir: agenteDir, k })}</div>
+                  <div className="t">{t('ui.modales.guion.lineaTexto', { texto: paraAgente(v, agente) })}</div>
                 </div>
               ))}
             </div>
@@ -757,10 +762,10 @@ export default function Game() {
             <div className="rv-ico">{revelar.ico}</div>
             <div className="rv-nom">{revelar.nom}</div>
             <div className="rv-ver mono">{revelar.ver}</div>
-            <div className="rv-di mono">Dilo en voz alta</div>
+            <div className="rv-di mono">{t('ui.revelar.dilo')}</div>
             <div className="rv-dec">{revelar.dec}</div>
             <div className="rv-pts mono">{revelar.pts}</div>
-            <button className="bt oro" id="rvBtn" onClick={() => { sfx.tap(); cerrarRevelar() }}>CONTINUAR</button>
+            <button className="bt oro" id="rvBtn" onClick={() => { sfx.tap(); cerrarRevelar() }}>{t('ui.revelar.continuar')}</button>
           </div>
         </div>
       )}
@@ -769,11 +774,11 @@ export default function Game() {
       {camaraAbierta && (
         <div className="capa on camera-layer">
           <div className="camera-panel">
-            <div className="hoja-top"><h3>📸 Cámara de evidencia</h3><button className="hud-ico" onClick={detenerCamara}>✕</button></div>
+            <div className="hoja-top"><h3>{t('ui.modales.camara.titulo')}</h3><button className="hud-ico" onClick={detenerCamara}>✕</button></div>
             <video ref={videoFoto} className="camera-video" autoPlay playsInline muted />
             <div className="camera-actions">
-              <button className="bt verde" onClick={capturarFoto}>CAPTURAR FOTO</button>
-              <button className="bt ghost" onClick={detenerCamara}>CANCELAR</button>
+              <button className="bt verde" onClick={capturarFoto}>{t('ui.modales.camara.capturar')}</button>
+              <button className="bt ghost" onClick={detenerCamara}>{t('ui.modales.camara.cancelar')}</button>
             </div>
           </div>
         </div>
@@ -792,7 +797,7 @@ function HUD({ fraccion, pct, puntos, onMusica, onGuion, onSonido, muteSfx }) {
     <div className="hud">
       <ADN fraccion={fraccion} />
       <div className="hud-info">
-        <span className="hud-lab">ADN restaurado</span>
+        <span className="hud-lab">{t('ui.hud.adnRestaurado')}</span>
         <span className="hud-val adnPct">{pct}%</span>
       </div>
       <div className="hud-sep"></div>
@@ -800,7 +805,7 @@ function HUD({ fraccion, pct, puntos, onMusica, onGuion, onSonido, muteSfx }) {
       <button className="hud-ico btnMusica" onClick={onMusica}>🎵</button>
       <button className="hud-ico btnSonido" onClick={onSonido}>{muteSfx ? '🔇' : '🔊'}</button>
       <button className="hud-ico btnGuion" onClick={onGuion}>🎙</button>
-      <button className="hud-ico btnAyuda" onClick={() => window.open('/ayuda', '_blank')} title="¿Cómo jugar?">?</button>
+      <button className="hud-ico btnAyuda" onClick={() => window.open('/ayuda', '_blank')} title={t('ui.hud.comoJugar')}>?</button>
     </div>
   )
 }
@@ -825,20 +830,20 @@ function JesusBox() {
     const img = new Image()
     img.onload = () => setOk(true)
     img.onerror = () => setOk(false)
-    img.alt = 'Jesús'
+    img.alt = t('ui.jesus.alt')
     img.src = publicAsset('/final/jesus.png')
   }, [])
   if (ok) {
     return (
       <div className="jesus" id="jesusBox">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={publicAsset('/final/jesus.png')} alt="Jesús" />
+        <img src={publicAsset('/final/jesus.png')} alt={t('ui.jesus.alt')} />
       </div>
     )
   }
   return (
     <div className="jesus" id="jesusBox">
-      <div className="aviso-img mono">[ imagen final ]<br />Coloca tu imagen en<br /><b>public/final/jesus.png</b></div>
+      <div className="aviso-img mono"><Rich s={t('ui.jesus.placeholder')} /></div>
     </div>
   )
 }

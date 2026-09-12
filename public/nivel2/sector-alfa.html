@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Sector Alfa · Nivel 2</title>
+<style>
+  :root { --cian:#00E5FF; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { height:100%; }
+  body {
+    background:#000;
+    font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Consolas,monospace;
+    overflow:hidden;
+  }
+  .lluvia {
+    position:absolute; inset:-15%;
+    display:flex; justify-content:space-around;
+    overflow:hidden; opacity:.42;
+    color:var(--cian); font-size:17px; line-height:1.15;
+    white-space:pre; filter:drop-shadow(0 0 5px var(--cian));
+    pointer-events:none;
+  }
+  .lluvia span { writing-mode:vertical-rl; animation:caer 3.8s linear infinite; }
+  @keyframes caer { from { transform:translateY(-35%); } to { transform:translateY(35%); } }
+  body::after {
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:repeating-linear-gradient(0deg, rgba(0,229,255,.035) 0 1px, transparent 1px 4px);
+  }
+  .palabra {
+    position:absolute; inset:0; z-index:1;
+    display:flex; align-items:center; justify-content:center; gap:.16em;
+    padding:0 6vw;
+    font-size:clamp(52px, 17vw, 170px);
+    font-weight:700; letter-spacing:.08em;
+    color:#fff;
+    text-align:center;
+    text-shadow:0 0 16px rgba(0,229,255,.9), 0 0 44px rgba(0,229,255,.5), 0 0 90px rgba(0,229,255,.25);
+  }
+  .palabra span { animation:latido 2.8s ease-in-out infinite; }
+  @keyframes latido { 0%,100% { opacity:1; } 50% { opacity:.5; } }
+  @media print {
+    body { background:#fff; overflow:visible; }
+    .lluvia, body::after { display:none; }
+    .palabra { color:#000; text-shadow:none; position:static; padding:20vh 0; }
+  }
+</style>
+</head>
+<body>
+  <div class="lluvia" aria-hidden="true"><span>エ B V 7 V B エ N 9 ク X P J F D D F J P X ク 9 N エ B V 7 V B エ N 9 ク X P J F D D F J P X ク 9 N エ B V 7 V B エ N 9 ク X P J F D D F J P X ク 9 N エ B V 7 V B エ N 9 ク X P J F D D F J P X ク 9 N エ B V 7 V B エ N 9 ク X P J F D D F J P X ク 9 N エ B V 7 V B エ N 9 ク X P J F D D F J P X ク 9 N エ B V 7 V B エ N 9 ク X P J F D D F J P X ク 9 N エ B V 7 V B エ N 9 ク X P J F D D F J P</span><span>0 I ウ E ウ I 0 U G 4 オ W Q M K K M Q W オ 4 G U 0 I ウ E ウ I 0 U G 4 オ W Q M K K M Q W オ 4 G U 0 I ウ E ウ I 0 U G 4 オ W Q M K K M Q W オ 4 G U 0 I ウ E ウ I 0 U G 4 オ W Q M K K M Q W オ 4 G U 0 I ウ E ウ I 0 U G 4 オ W Q M K K M Q W オ 4 G U 0 I ウ E ウ I 0 U G 4 オ W Q M K K M Q W オ 4 G U 0 I ウ E ウ I 0 U G 4 オ W Q M K K M Q W オ 4 G U 0 I ウ E ウ I 0 U G 4 オ W Q M K K M Q W</span><span>7 P コ L コ P 7 イ N B 1 エ X T R R T X エ 1 B N イ 7 P コ L コ P 7 イ N B 1 エ X T R R T X エ 1 B N イ 7 P コ L コ P 7 イ N B 1 エ X T R R T X エ 1 B N イ 7 P コ L コ P 7 イ N B 1 エ X T R R T X エ 1 B N イ 7 P コ L コ P 7 イ N B 1 エ X T R R T X エ 1 B N イ 7 P コ L コ P 7 イ N B 1 エ X T R R T X エ 1 B N イ 7 P コ L コ P 7 イ N B 1 エ X T R R T X エ 1 B N イ 7 P コ L コ P 7 イ N B 1 エ X T R R T X エ</span><span>E W 6 S 6 W E ケ U I 8 0 オ ア Y Y ア オ 0 8 I U ケ E W 6 S 6 W E ケ U I 8 0 オ ア Y Y ア オ 0 8 I U ケ E W 6 S 6 W E ケ U I 8 0 オ ア Y Y ア オ 0 8 I U ケ E W 6 S 6 W E ケ U I 8 0 オ ア Y Y ア オ 0 8 I U ケ E W 6 S 6 W E ケ U I 8 0 オ ア Y Y ア オ 0 8 I U ケ E W 6 S 6 W E ケ U I 8 0 オ ア Y Y ア オ 0 8 I U ケ E W 6 S 6 W E ケ U I 8 0 オ ア Y Y ア オ 0 8 I U ケ E W 6 S 6 W E ケ U I 8 0 オ ア Y Y ア オ 0</span><span>L エ D Z D エ L 5 イ P F 7 1 ク カ カ ク 1 7 F P イ 5 L エ D Z D エ L 5 イ P F 7 1 ク カ カ ク 1 7 F P イ 5 L エ D Z D エ L 5 イ P F 7 1 ク カ カ ク 1 7 F P イ 5 L エ D Z D エ L 5 イ P F 7 1 ク カ カ ク 1 7 F P イ 5 L エ D Z D エ L 5 イ P F 7 1 ク カ カ ク 1 7 F P イ 5 L エ D Z D エ L 5 イ P F 7 1 ク カ カ ク 1 7 F P イ 5 L エ D Z D エ L 5 イ P F 7 1 ク カ カ ク 1 7 F P イ 5 L エ D Z D エ L 5 イ P F 7 1 ク カ カ ク 1 7</span><span>S 0 K キ K 0 S C ケ W M E 8 4 2 2 4 8 E M W ケ C S 0 K キ K 0 S C ケ W M E 8 4 2 2 4 8 E M W ケ C S 0 K キ K 0 S C ケ W M E 8 4 2 2 4 8 E M W ケ C S 0 K キ K 0 S C ケ W M E 8 4 2 2 4 8 E M W ケ C S 0 K キ K 0 S C ケ W M E 8 4 2 2 4 8 E M W ケ C S 0 K キ K 0 S C ケ W M E 8 4 2 2 4 8 E M W ケ C S 0 K キ K 0 S C ケ W M E 8 4 2 2 4 8 E M W ケ C S 0 K キ K 0 S C ケ W M E 8 4 2 2 4 8 E</span><span>Z 7 R 3 R 7 Z J 5 エ T L F B 9 9 B F L T エ 5 J Z 7 R 3 R 7 Z J 5 エ T L F B 9 9 B F L T エ 5 J Z 7 R 3 R 7 Z J 5 エ T L F B 9 9 B F L T エ 5 J Z 7 R 3 R 7 Z J 5 エ T L F B 9 9 B F L T エ 5 J Z 7 R 3 R 7 Z J 5 エ T L F B 9 9 B F L T エ 5 J Z 7 R 3 R 7 Z J 5 エ T L F B 9 9 B F L T エ 5 J Z 7 R 3 R 7 Z J 5 エ T L F B 9 9 B F L T エ 5 J Z 7 R 3 R 7 Z J 5 エ T L F B 9 9 B F L</span><span>キ E Y A Y E キ Q C 0 ア S M I G G I M S ア 0 C Q キ E Y A Y E キ Q C 0 ア S M I G G I M S ア 0 C Q キ E Y A Y E キ Q C 0 ア S M I G G I M S ア 0 C Q キ E Y A Y E キ Q C 0 ア S M I G G I M S ア 0 C Q キ E Y A Y E キ Q C 0 ア S M I G G I M S ア 0 C Q キ E Y A Y E キ Q C 0 ア S M I G G I M S ア 0 C Q キ E Y A Y E キ Q C 0 ア S M I G G I M S ア 0 C Q キ E Y A Y E キ Q C 0 ア S M I G G I M S</span><span>3 L カ H カ L 3 X J 7 ク Z T P N N P T Z ク 7 J X 3 L カ H カ L 3 X J 7 ク Z T P N N P T Z ク 7 J X 3 L カ H カ L 3 X J 7 ク Z T P N N P T Z ク 7 J X 3 L カ H カ L 3 X J 7 ク Z T P N N P T Z ク 7 J X 3 L カ H カ L 3 X J 7 ク Z T P N N P T Z ク 7 J X 3 L カ H カ L 3 X J 7 ク Z T P N N P T Z ク 7 J X 3 L カ H カ L 3 X J 7 ク Z T P N N P T Z ク 7 J X 3 L カ H カ L 3 X J 7 ク Z T P N N P T Z</span><span>A S 2 O 2 S A オ Q E 4 キ ア W U U W ア キ 4 E Q オ A S 2 O 2 S A オ Q E 4 キ ア W U U W ア キ 4 E Q オ A S 2 O 2 S A オ Q E 4 キ ア W U U W ア キ 4 E Q オ A S 2 O 2 S A オ Q E 4 キ ア W U U W ア キ 4 E Q オ A S 2 O 2 S A オ Q E 4 キ ア W U U W ア キ 4 E Q オ A S 2 O 2 S A オ Q E 4 キ ア W U U W ア キ 4 E Q オ A S 2 O 2 S A オ Q E 4 キ ア W U U W ア キ 4 E Q オ A S 2 O 2 S A オ Q E 4 キ ア W U U W ア キ</span><span>H Z 9 V 9 Z H 1 X L B 3 ク エ イ イ エ ク 3 B L X 1 H Z 9 V 9 Z H 1 X L B 3 ク エ イ イ エ ク 3 B L X 1 H Z 9 V 9 Z H 1 X L B 3 ク エ イ イ エ ク 3 B L X 1 H Z 9 V 9 Z H 1 X L B 3 ク エ イ イ エ ク 3 B L X 1 H Z 9 V 9 Z H 1 X L B 3 ク エ イ イ エ ク 3 B L X 1 H Z 9 V 9 Z H 1 X L B 3 ク エ イ イ エ ク 3 B L X 1 H Z 9 V 9 Z H 1 X L B 3 ク エ イ イ エ ク 3 B L X 1 H Z 9 V 9 Z H 1 X L B 3 ク エ イ イ エ ク 3</span><span>O キ G ウ G キ O 8 オ S I A 4 0 ケ ケ 0 4 A I S オ 8 O キ G ウ G キ O 8 オ S I A 4 0 ケ ケ 0 4 A I S オ 8 O キ G ウ G キ O 8 オ S I A 4 0 ケ ケ 0 4 A I S オ 8 O キ G ウ G キ O 8 オ S I A 4 0 ケ ケ 0 4 A I S オ 8 O キ G ウ G キ O 8 オ S I A 4 0 ケ ケ 0 4 A I S オ 8 O キ G ウ G キ O 8 オ S I A 4 0 ケ ケ 0 4 A I S オ 8 O キ G ウ G キ O 8 オ S I A 4 0 ケ ケ 0 4 A I S オ 8 O キ G ウ G キ O 8 オ S I A 4 0 ケ ケ 0 4 A</span><span>V 3 N コ N 3 V F 1 Z P H B 7 5 5 7 B H P Z 1 F V 3 N コ N 3 V F 1 Z P H B 7 5 5 7 B H P Z 1 F V 3 N コ N 3 V F 1 Z P H B 7 5 5 7 B H P Z 1 F V 3 N コ N 3 V F 1 Z P H B 7 5 5 7 B H P Z 1 F V 3 N コ N 3 V F 1 Z P H B 7 5 5 7 B H P Z 1 F V 3 N コ N 3 V F 1 Z P H B 7 5 5 7 B H P Z 1 F V 3 N コ N 3 V F 1 Z P H B 7 5 5 7 B H P Z 1 F V 3 N コ N 3 V F 1 Z P H B 7 5 5 7 B H</span><span>ウ A U 6 U A ウ M 8 キ W O I E C C E I O W キ 8 M ウ A U 6 U A ウ M 8 キ W O I E C C E I O W キ 8 M ウ A U 6 U A ウ M 8 キ W O I E C C E I O W キ 8 M ウ A U 6 U A ウ M 8 キ W O I E C C E I O W キ 8 M ウ A U 6 U A ウ M 8 キ W O I E C C E I O W キ 8 M ウ A U 6 U A ウ M 8 キ W O I E C C E I O W キ 8 M ウ A U 6 U A ウ M 8 キ W O I E C C E I O W キ 8 M ウ A U 6 U A ウ M 8 キ W O I E C C E I O</span></div>
+  <div class="palabra"><span style="animation-delay:0.00s">A</span><span style="animation-delay:0.14s">D</span><span style="animation-delay:0.28s">A</span><span style="animation-delay:0.42s">M</span><span style="animation-delay:0.56s">O</span></div>
+</body>
+</html>
