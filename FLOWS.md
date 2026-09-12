@@ -75,12 +75,10 @@ sequenceDiagram
   UI->>T: Inicia 300 segundos
   UI->>V: Reproduce voz n1...n6
   U->>UI: Realiza el reto físico
-  U->>UI: Selecciona una fotografía
+  U->>UI: (opcional) Selecciona una fotografía
   UI->>UI: Comprime la imagen a JPEG
   U->>UI: Introduce código y pulsa Hackear
-  alt No hay fotografía
-    UI-->>U: Falta la evidencia del reto
-  else Código incorrecto
+  alt Código incorrecto
     UI->>V: Reproduce mal-1 o mal-2
     UI-->>U: ACCESS DENIED; permite reintentar
   else Código correcto
@@ -156,7 +154,7 @@ En la voz sintetizada, el navegador aplica el nivel configurado al comenzar cada
 ## Criterios de aceptación
 
 - El usuario no puede saltar un nivel bloqueado.
-- Cada nivel requiere foto y código correcto.
+- Cada nivel requiere código correcto; la foto de evidencia es opcional.
 - Un código válido tolera diferencias de mayúsculas, tildes, espacios y puntuación.
 - Completar un nivel desbloquea exactamente una pieza.
 - Completar los seis niveles muestra la pantalla final.

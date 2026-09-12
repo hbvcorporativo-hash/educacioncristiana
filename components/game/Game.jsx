@@ -242,7 +242,6 @@ export default function Game() {
     const x = nv[actual]
     const v = claveVal
     if (!v.trim()) { avisar(aviso('ui.avisos.claveVacia')); return }
-    if (!x.foto) { avisar(aviso('ui.avisos.fotoFaltante')); return }
     if (norm(v) !== norm(x.clave)) {
       avisar(aviso('ui.avisos.denied'))
       sfx.mal()

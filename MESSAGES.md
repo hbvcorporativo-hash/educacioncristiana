@@ -102,7 +102,7 @@ La función `norm()`:
 3. Elimina tildes mediante normalización Unicode NFD.
 4. Elimina todo lo que no sea letra ASCII o número.
 
-Por tanto, `Juan 1:12`, `JUAN-1:12` y `juan 1 12` se comparan como el mismo código. La validación requiere además que exista evidencia fotográfica del reto.
+Por tanto, `Juan 1:12`, `JUAN-1:12` y `juan 1 12` se comparan como el mismo código. La foto de evidencia es opcional.
 
 ## Reglas de edición
 

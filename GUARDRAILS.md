@@ -20,7 +20,7 @@ Estas reglas mantienen la aplicación estable, exportable y fácil de mantener. 
 - Debe permanecer activa una sola pantalla a la vez mediante `.pantalla.on`.
 - No agregar un router para las pantallas del juego.
 - Mantener el flujo: introducción, avatar, mapa, nivel y pantalla final.
-- Los niveles se desbloquean en orden y solo se completa un nivel con evidencia fotográfica y código válido.
+- Los niveles se desbloquean en orden y solo se completa un nivel con código válido; la foto de evidencia es opcional.
 
 ## Estado e invariantes
 
@@ -88,7 +88,7 @@ npm run build
 También se debe comprobar manualmente:
 
 - La navegación completa de inicio a final.
-- La validación con foto y código correcto.
+- La validación con código correcto (la foto es opcional).
 - El rechazo de códigos incorrectos y niveles bloqueados.
 - La reproducción de música, SFX y fallback de voz.
 - La cámara y la selección alternativa de archivos.
