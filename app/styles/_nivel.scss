@@ -113,6 +113,7 @@
   border-radius: 11px;
   padding: 9px 11px;
   font-size: 13.5px;
+  animation: tjIn .45s ease both;
 
   .marca {
     font-family: var(--m);
@@ -137,6 +138,11 @@
     background: rgba(52, 227, 155, .16);
     color: var(--verde);
   }
+}
+
+@keyframes tjIn {
+  from { opacity: 0; transform: translateY(8px) scale(.98); }
+  to { opacity: 1; transform: none; }
 }
 
 .materiales {

@@ -23,6 +23,7 @@ export default function Game() {
   const [puntos, setPuntos] = useState(0)
   const [actual, setActual] = useState(null)
   const [nuevaPieza, setNuevaPieza] = useState(null)
+  const [tarjetasVistas, setTarjetasVistas] = useState(0)
   const [matrixTipo, setMatrixTipo] = useState(null)
   const matrixTimer = useRef(null)
 
@@ -142,6 +143,7 @@ export default function Game() {
     setActual(i)
     setClaveVal('')
     setClaveMal(false)
+    setTarjetasVistas(0)
     avisar({ t: '', k: '' })
     verPantalla('pNivel')
     if (!x.hecho) arrancarReloj()
@@ -274,6 +276,7 @@ export default function Game() {
     sfx.tap()
     voz.hablar(nv[actual].pista)
     avisar(aviso('ui.avisos.pista', { agente: agenteNom }))
+    setTarjetasVistas(n => Math.min(n + 1, (nv[actual].tarjetas || []).length))
   }
 
   function cerrarRevelar() {
@@ -394,6 +397,8 @@ export default function Game() {
   const relojTxt = Math.floor(relojResta / 60) + ':' + String(relojResta % 60).padStart(2, '0')
 
   const nivelX = actual !== null ? nv[actual] : null
+  const totalTarjetas = (nivelX?.tarjetas || []).length
+  const tarjetasMostradas = nivelX?.hecho ? totalTarjetas : tarjetasVistas
 
   /* ===== RENDER ===== */
   return (
@@ -601,7 +606,7 @@ export default function Game() {
               <div className="eti">{t('ui.nivel.reto')}</div>
               <p>{nivelX.reto}</p>
               <div className="tarjetas">
-                {(nivelX.tarjetas || []).map((t, i) => (
+                {(nivelX.tarjetas || []).slice(0, tarjetasMostradas).map((t, i) => (
                   <div key={i} className={`tj ${t[1]}`}>
                     <span className="marca mono">{t[2]}</span><span>{t[0]}</span>
                   </div>
