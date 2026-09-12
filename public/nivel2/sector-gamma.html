@@ -7,14 +7,13 @@
 <style>
   :root { --cian:#00E5FF; }
   * { box-sizing:border-box; margin:0; padding:0; }
-  html, body { height:100%; }
+  html, body { height:100%; overflow:hidden; }
   body {
     background:#000;
     font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Consolas,monospace;
-    overflow:hidden;
   }
   .lluvia {
-    position:absolute; inset:-15%;
+    position:absolute; top:-15%; bottom:-15%; left:0; right:0;
     display:flex; justify-content:space-around;
     overflow:hidden; opacity:.42;
     color:var(--cian); font-size:17px; line-height:1.15;
@@ -29,9 +28,10 @@
   }
   .palabra {
     position:absolute; inset:0; z-index:1;
-    display:flex; align-items:center; justify-content:center; gap:.16em;
+    display:flex; align-items:center; justify-content:center;
+    gap:.16em; flex-wrap:nowrap; white-space:nowrap;
     padding:0 6vw;
-    font-size:clamp(52px, 17vw, 170px);
+    font-size:clamp(32px, 12.0vw, 170px);
     font-weight:700; letter-spacing:.08em;
     color:#fff;
     text-align:center;
